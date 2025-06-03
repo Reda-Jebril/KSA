@@ -10,8 +10,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Warm Neutrals -->
-    <!-- Application Structure Plan: A single-page application designed as an interactive dashboard. The structure is thematic rather than linear to facilitate user exploration. Key sections include: 1) An introduction with key stats. 2) An interactive card-based section for 'Crack Types'. 3) A visual grid for 'Influencing Factors'. 4) The core interactive element: a dynamic bar chart for 'Depth Estimation' that allows users to toggle between road types (Highway/Rural). 5) An accordion section for 'Recommendations'. 6) A new section for 'Sources'. This structure was chosen to transform a dense technical report into an intuitive, engaging tool for non-experts and professionals alike, focusing on discoverability and direct data interaction. -->
-    <!-- Visualization & Content Choices: Report Info: Crack types and max depths -> Goal: Compare/Inform -> Viz: Interactive Horizontal Bar Chart -> Interaction: User can toggle a button to switch dataset between 'Highway' and 'Rural' road types, which dynamically updates the chart's data and scale -> Justification: This provides a clear, powerful comparison of crack severity under different common scenarios in KSA, making the key quantitative data easily digestible -> Library/Method: Chart.js (Canvas). Influencing factors are presented in a grid with icons for quick recognition. Recommendations are in an accordion. Sources are listed as clickable links. Icons added to navigation. -->
+    <!-- Application Structure Plan: A single-page application designed as an interactive dashboard. The structure is thematic rather than linear to facilitate user exploration. Key sections include: 1) An introduction with key stats. 2) An interactive card-based section for 'Crack Types'. 3) A visual grid for 'Influencing Factors'. 4) The core interactive element: a dynamic bar chart for 'Depth Estimation' that allows users to toggle between road types (Highway/Rural). 5) An accordion section for 'Recommendations'. 6) A new section for 'Sources' with placeholder links. This structure was chosen to transform a dense technical report into an intuitive, engaging tool for non-experts and professionals alike, focusing on discoverability and direct data interaction. -->
+    <!-- Visualization & Content Choices: Report Info: Crack types and max depths -> Goal: Compare/Inform -> Viz: Interactive Horizontal Bar Chart -> Interaction: User can toggle a button to switch dataset between 'Highway' and 'Rural' road types, which dynamically updates the chart's data and scale -> Justification: This provides a clear, powerful comparison of crack severity under different common scenarios in KSA, making the key quantitative data easily digestible -> Library/Method: Chart.js (Canvas). Influencing factors are presented in a grid with icons for quick recognition. Recommendations are in an accordion. Sources are listed as clickable links (placeholders). Icons updated in navigation. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
@@ -79,7 +79,7 @@
             <h1 class="text-xl font-bold text-accent">تحليل شروخ الأسفلت</h1>
             <div class="hidden md:flex items-center space-x-8 lg:space-x-10 text-lg">
                 <a href="#hero" class="nav-link active-nav"><span class="icon">🏠</span>الرئيسية</a>
-                <a href="#crack-types" class="nav-link"><span class="icon">🛣️</span>أنواع الشروخ</a>
+                <a href="#crack-types" class="nav-link"><span class="icon">🚧</span>أنواع الشروخ</a>
                 <a href="#factors" class="nav-link"><span class="icon">⚙️</span>العوامل المؤثرة</a>
                 <a href="#depth" class="nav-link"><span class="icon">📊</span>تقديرات العمق</a>
                 <a href="#recommendations" class="nav-link"><span class="icon">💡</span>التوصيات</a>
@@ -91,7 +91,7 @@
         </div>
         <div id="mobile-menu" class="hidden md:hidden bg-primary shadow-lg">
             <a href="#hero" class="block text-center py-3 px-4 text-lg hover:bg-secondary"><span class="icon">🏠</span> الرئيسية</a>
-            <a href="#crack-types" class="block text-center py-3 px-4 text-lg hover:bg-secondary"><span class="icon">🛣️</span> أنواع الشروخ</a>
+            <a href="#crack-types" class="block text-center py-3 px-4 text-lg hover:bg-secondary"><span class="icon">🚧</span> أنواع الشروخ</a>
             <a href="#factors" class="block text-center py-3 px-4 text-lg hover:bg-secondary"><span class="icon">⚙️</span> العوامل المؤثرة</a>
             <a href="#depth" class="block text-center py-3 px-4 text-lg hover:bg-secondary"><span class="icon">📊</span> تقديرات العمق</a>
             <a href="#recommendations" class="block text-center py-3 px-4 text-lg hover:bg-secondary"><span class="icon">💡</span> التوصيات</a>
@@ -202,7 +202,7 @@
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12">
                     <h2 class="text-3xl md:text-4xl font-bold">المصادر والمراجع</h2>
-                    <p class="mt-4 text-lg max-w-2xl mx-auto text-gray-700">قائمة بالمصادر العلمية والتقارير التي تم الاعتماد عليها في إعداد هذا التحليل. انقر على أي مصدر للاطلاع عليه (سيفتح في نافذة جديدة).</p>
+                    <p class="mt-4 text-lg max-w-2xl mx-auto text-gray-700">قائمة بالمصادر العلمية والتقارير التي تم الاعتماد عليها في إعداد هذا التحليل. انقر على أي مصدر للاطلاع عليه (سيفتح في نافذة جديدة). <strong class="text-red-600">ملاحظة: الروابط أدناه هي روابط نائبة حاليًا. يرجى استبدال "#" بالروابط الفعلية للمصادر.</strong></p>
                 </div>
                 <div id="sources-list" class="max-w-3xl mx-auto space-y-4">
                     <a href="#" target="_blank" rel="noopener noreferrer" class="block p-5 bg-primary rounded-xl shadow-md hover:shadow-lg transition-shadow text-accent hover:text-orange-700">
@@ -530,14 +530,16 @@
                 anchor.addEventListener('click', function (e) {
                     e.preventDefault();
                     const targetId = this.getAttribute('href');
-                    const targetElement = document.querySelector(targetId);
-                    if (targetElement) {
-                         const navHeight = document.getElementById('navbar').offsetHeight;
-                         const offsetTop = targetElement.offsetTop - navHeight;
-                         window.scrollTo({
-                            top: offsetTop,
-                            behavior: 'smooth'
-                        });
+                    if (targetId && targetId.length > 1 && targetId.startsWith('#')) { // Check if targetId is a valid hash
+                        const targetElement = document.querySelector(targetId);
+                        if (targetElement) {
+                             const navHeight = document.getElementById('navbar').offsetHeight;
+                             const offsetTop = targetElement.offsetTop - navHeight;
+                             window.scrollTo({
+                                top: offsetTop,
+                                behavior: 'smooth'
+                            });
+                        }
                     }
                     if (mobileMenu.classList.contains('hidden') === false) {
                         mobileMenu.classList.add('hidden');
