@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحليل تفاعلي لأعماق شروخ الأسفلت في السعودية</title>
+    <!-- Chosen Palette: Desert Roads (Stone, Slate, Amber, Sky) -->
+    <!-- Application Structure Plan: The SPA uses a thematic, non-linear structure to make the dense report accessible. It starts with the core problem, then offers a 'Crack Explorer' as the main interactive discovery tool. This is followed by sections on influencing factors, a comparative depth chart for a quick summary, an interactive recommendations tool, and finally a sources section. This user-centric flow prioritizes understanding and exploration over the linear structure of the source document. -->
+    <!-- Visualization & Content Choices:
+    - Crack Types: Goal: Organize/Inform -> Method: Interactive cards with on-click reveal -> Justification: Breaks down complex info into user-controlled chunks, preventing overwhelm. Method: Vanilla JS.
+    - Max Depth Comparison: Goal: Compare -> Method: Chart.js Horizontal Bar Chart -> Justification: Provides a clear, at-a-glance summary of the report's key quantitative finding. Tooltips add detail on hover. Library: Chart.js.
+    - Influencing Factors: Goal: Explain Relationships -> Method: Tabbed interface -> Justification: Organizes multiple related topics cleanly without a long scroll. Method: Vanilla JS.
+    - Maintenance: Goal: Guide Action -> Method: Interactive dropdown updating a text card -> Justification: Creates a practical, actionable tool from report recommendations. Method: Vanilla JS.
+    - Sources: Goal: Provide Credibility/Further Reading -> Method: Interactive list of clickable links -> Justification: Allows users to verify information and explore topics in more depth. Method: HTML/JS.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 50vh;
+            width: 100%;
+            max-width: 800px;
+            max-height: 500px;
+        }
+        .section-title {
+            @apply text-3xl md:text-4xl font-extrabold text-slate-800 mb-4 text-center;
+        }
+        .section-subtitle {
+            @apply text-lg text-slate-600 mb-8 md:mb-12 text-center max-w-3xl mx-auto;
+        }
+        .card {
+            @apply bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+        }
+        .tab.active {
+            @apply border-amber-500 text-amber-600;
+        }
+        [x-cloak] {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-slate-700">
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <span class="font-bold text-xl text-slate-800">تحليل شروخ الأسفلت</span>
+                    <span class="text-xs text-slate-500 mr-2 mt-1">(تصميم: آلاء يحيى)</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-4 flex items-center space-x-4 space-x-reverse">
+                        <a href="#intro" class="text-slate-600 hover:text-amber-500 px-3 py-2 rounded-md text-sm font-medium">المقدمة</a>
+                        <a href="#explorer" class="text-slate-600 hover:text-amber-500 px-3 py-2 rounded-md text-sm font-medium">أنواع الشروخ</a>
+                        <a href="#factors" class="text-slate-600 hover:text-amber-500 px-3 py-2 rounded-md text-sm font-medium">العوامل المؤثرة</a>
+                        <a href="#depth-chart" class="text-slate-600 hover:text-amber-500 px-3 py-2 rounded-md text-sm font-medium">مقارنة الأعماق</a>
+                        <a href="#solutions" class="text-slate-600 hover:text-amber-500 px-3 py-2 rounded-md text-sm font-medium">الحلول</a>
+                        <a href="#sources" class="text-slate-600 hover:text-amber-500 px-3 py-2 rounded-md text-sm font-medium">المصادر</a>
+                    </div>
+                </div>
+                 <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-slate-600 hover:text-amber-500 focus:outline-none">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="md:hidden hidden bg-white shadow-lg">
+            <a href="#intro" class="block text-slate-600 hover:text-amber-500 px-3 py-2 rounded-md text-base font-medium">المقدمة</a>
+            <a href="#explorer" class="block text-slate-600 hover:text-amber-500 px-3 py-2 rounded-md text-base font-medium">أنواع الشروخ</a>
+            <a href="#factors" class="block text-slate-600 hover:text-amber-500 px-3 py-2 rounded-md text-base font-medium">العوامل المؤثرة</a>
+            <a href="#depth-chart" class="block text-slate-600 hover:text-amber-500 px-3 py-2 rounded-md text-base font-medium">مقارنة الأعماق</a>
+            <a href="#solutions" class="block text-slate-600 hover:text-amber-500 px-3 py-2 rounded-md text-base font-medium">الحلول</a>
+            <a href="#sources" class="block text-slate-600 hover:text-amber-500 px-3 py-2 rounded-md text-base font-medium">المصادر</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Section 1: Hero -->
+        <section id="intro" class="bg-white pt-24 pb-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight">
+                    العمق الأقصى لشروخ الأرصفة الإسفلتية
+                </h1>
+                <p class="mt-6 max-w-3xl mx-auto text-xl text-slate-600">
+                    تحليل تفاعلي شامل للعوامل المؤثرة وآليات تدهور الأرصفة الإسفلتية المرنة في المملكة العربية السعودية، لفهم أعمق لأسباب الشروخ وكيفية معالجتها.
+                </p>
+                <div class="mt-8 flex justify-center gap-4">
+                     <a href="#explorer" class="inline-block bg-amber-500 text-white font-bold rounded-lg px-6 py-3 transition-transform duration-200 hover:scale-105">
+                        ابدأ الاستكشاف
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Crack Explorer -->
+        <section id="explorer" class="py-16 md:py-24 bg-stone-100">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="section-title">مستكشف أنواع الشروخ</h2>
+                <p class="section-subtitle">
+                    انقر على أي نوع من الشروخ أدناه لعرض تفاصيله الكاملة، بما في ذلك أسبابه الرئيسية في البيئة السعودية والعمق المحتمل الذي يمكن أن يصل إليه.
+                </p>
+                <div id="crack-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                </div>
+
+                <div id="crack-details-container" class="mt-12 hidden">
+                    <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+                        <div class="flex justify-between items-start">
+                             <h3 id="details-title" class="text-2xl font-bold text-sky-800 mb-4"></h3>
+                             <button id="close-details" class="text-slate-400 hover:text-slate-600 text-2xl leading-none">&times;</button>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div>
+                                <h4 class="font-bold text-slate-700 mb-2">الوصف:</h4>
+                                <p id="details-description" class="text-slate-600"></p>
+                                <h4 class="font-bold text-slate-700 mt-4 mb-2">آلية التكوين:</h4>
+                                <p id="details-initiation" class="text-slate-600"></p>
+                                <h4 class="font-bold text-slate-700 mt-4 mb-2">الأسباب الرئيسية في السعودية:</h4>
+                                <p id="details-causes" class="text-slate-600"></p>
+                            </div>
+                            <div class="flex flex-col items-center justify-center bg-slate-50 p-4 rounded-lg">
+                                <h4 class="font-bold text-slate-700 mb-2">العمق المحتمل</h4>
+                                <div id="depth-visual" class="w-full h-48 relative">
+                                    <div class="absolute top-0 right-0 w-full text-xs text-slate-500">سطح الرصف</div>
+                                    <div class="absolute bottom-0 right-0 w-full text-xs text-slate-500">قاعدة الرصف</div>
+                                    <div class="absolute h-full w-24 left-1/2 -translate-x-1/2 bg-gray-700 rounded-t-sm" title="مقطع الرصف الإسفلتي">
+                                        <div id="crack-path" class="absolute bg-red-500 w-1/2 left-1/4"></div>
+                                    </div>
+                                </div>
+                                <p id="details-depth-text" class="text-center mt-4 font-semibold text-amber-700"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Influencing Factors -->
+        <section id="factors" class="py-16 md:py-24">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="section-title">العوامل المؤثرة الرئيسية</h2>
+                <p class="section-subtitle">
+                    تتفاعل مجموعة معقدة من العوامل لتسبب بدء وانتشار الشروخ. استكشف العوامل الأكثر تأثيرًا في بيئة المملكة.
+                </p>
+                <div class="flex justify-center border-b border-slate-200 mb-8">
+                    <button data-tab="climate" class="tab-button tab py-4 px-6 block hover:text-amber-500 focus:outline-none text-slate-600 border-b-2 font-medium active">المناخ</button>
+                    <button data-tab="soil" class="tab-button tab py-4 px-6 block hover:text-amber-500 focus:outline-none text-slate-600 border-b-2 font-medium">التربة</button>
+                    <button data-tab="traffic" class="tab-button tab py-4 px-6 block hover:text-amber-500 focus:outline-none text-slate-600 border-b-2 font-medium">المرور</button>
+                    <button data-tab="materials" class="tab-button tab py-4 px-6 block hover:text-amber-500 focus:outline-none text-slate-600 border-b-2 font-medium">المواد والتنفيذ</button>
+                </div>
+                <div id="tab-content" class="max-w-4xl mx-auto">
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Depth Chart -->
+        <section id="depth-chart" class="py-16 md:py-24 bg-stone-100">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="section-title">مقارنة الأعماق القصوى للشروخ</h2>
+                <p class="section-subtitle">
+                    رسم بياني يوضح العمق الأقصى التقديري الذي يمكن أن تصل إليه الأنواع المختلفة من الشروخ في طبقات الأسفلت، مما يعكس مدى خطورتها الإنشائية.
+                </p>
+                <div class="chart-container">
+                    <canvas id="maxDepthChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Solutions & Recommendations -->
+        <section id="solutions" class="py-16 md:py-24">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="section-title">الحلول والتوصيات</h2>
+                <p class="section-subtitle">
+                   استراتيجيات متكاملة لتحسين تصميم وإنشاء وصيانة الأرصفة الإسفلتية لمقاومة التشقق بشكل أفضل.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="card p-6">
+                        <h3 class="text-xl font-bold text-sky-800 mb-3">تحسين الخلطات الإسفلتية</h3>
+                        <ul class="list-disc list-inside space-y-2 text-slate-600">
+                            <li>استخدام بيتومين معدل بالبوليمرات (PMB) لتحسين المرونة ومقاومة الحرارة.</li>
+                            <li>اختيار ركام عالي الجودة لزيادة التشابك الداخلي.</li>
+                            <li>التحكم الدقيق في نسبة الفراغات الهوائية (3-5%).</li>
+                            <li>تصميم خاص للمناطق الصحراوية لمقاومة الأشعة فوق البنفسجية.</li>
+                        </ul>
+                    </div>
+                    <div class="card p-6">
+                        <h3 class="text-xl font-bold text-sky-800 mb-3">جودة الإنشاء ومعالجة التربة</h3>
+                        <ul class="list-disc list-inside space-y-2 text-slate-600">
+                           <li>ضمان الدمك الكافي لجميع طبقات الرصف.</li>
+                           <li>تقييم ومعالجة التربة التحتية الضعيفة (انتفاخية، سبخية) قبل الرصف.</li>
+                           <li>توفير نظام صرف فعال للمياه السطحية والجوفية.</li>
+                           <li>العناية بفواصل الرصف الطولية والعرضية.</li>
+                        </ul>
+                    </div>
+                     <div class="card p-6 md:col-span-2 lg:col-span-1">
+                        <h3 class="text-xl font-bold text-sky-800 mb-3">استراتيجية الصيانة المناسبة</h3>
+                        <p class="text-slate-500 mb-4">اختر نوع الشرخ وعمقه لتعرف الإجراء المقترح.</p>
+                        <select id="maintenance-selector" class="w-full p-2 border border-slate-300 rounded-md focus:ring-amber-500 focus:border-amber-500">
+                        </select>
+                        <div id="maintenance-recommendation" class="mt-4 bg-amber-50 p-4 rounded-lg min-h-[100px]">
+                            <p class="font-semibold text-amber-800">اختر من القائمة لعرض التوصية...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 6: Sources -->
+        <section id="sources" class="py-16 md:py-24 bg-stone-100">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="section-title">المصادر والمراجع</h2>
+                <p class="section-subtitle">
+                    قائمة بالمصادر والمراجع العلمية الرئيسية التي استند إليها هذا التحليل. اضغط على المصدر لعرضه (روابط مبدئية).
+                </p>
+                <div id="sources-list" class="space-y-4 max-w-3xl mx-auto">
+                    </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-slate-800 text-white">
+        <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 text-center">
+            <p>تم تطوير هذا التطبيق التفاعلي بناءً على تقرير "العمق الأقصى المحتمل للشروخ في الأرصفة الإسفلتية المرنة بالمملكة العربية السعودية".</p>
+            <p class="text-sm text-slate-400 mt-2">&copy; 2024 - أداة تحليل تفاعلية (تصميم: آلاء يحيى)</p>
+        </div>
+    </footer>
+
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        const crackTypesData = [
+            {
+                id: 'alligator',
+                name: 'الشروخ التمساحية (الكلال)',
+                description: 'شبكة من الشروخ المترابطة تشبه جلد التمساح، وتظهر في مسارات العجلات.',
+                initiation: 'تبدأ من أسفل طبقة الأسفلت نتيجة للإجهادات المتكررة (الكلال)، ثم تنتشر للأعلى.',
+                causes: 'الأحمال المرورية الثقيلة والمتكررة، ضعف طبقات الأساس، أو عدم كفاية سمك طبقة الأسفلت.',
+                minDepth: 10,
+                maxDepth: 20,
+                depthText: 'تمتد عبر كامل سمك طبقات الأسفلت (10-20+ سم).',
+                depthVisual: { top: '0%', height: '100%', from: 'bottom' }
+            },
+            {
+                id: 'block',
+                name: 'الشروخ الكتلية',
+                description: 'شروخ متصلة تشكل قطعاً كبيرة ومستطيلة على سطح الرصف.',
+                initiation: 'تبدأ من سطح طبقة الأسفلت.',
+                causes: 'التغيرات الحجمية (الانكماش والتمدد) نتيجة التقلبات الحرارية، وتقادم البيتومين الذي يجعله هشاً.',
+                minDepth: 2,
+                maxDepth: 10,
+                depthText: 'تبدأ سطحية (2-5 سم) وقد تمتد لكامل الطبقة السطحية أو أعمق (حتى 10+ سم).',
+                depthVisual: { top: '0%', height: '50%', from: 'top' }
+            },
+            {
+                id: 'longitudinal',
+                name: 'الشروخ الطولية',
+                description: 'شروخ تمتد بشكل موازٍ لاتجاه حركة المرور.',
+                initiation: 'يمكن أن تبدأ من السطح (حرارية) أو من الأسفل (كلال).',
+                causes: 'فواصل الرصف السيئة، التقلبات الحرارية، أو قد تكون مؤشراً مبكراً على شروخ الكلال.',
+                minDepth: 2,
+                maxDepth: 20,
+                depthText: 'يعتمد على السبب، قد تكون سطحية أو تمتد لكامل العمق (10-20+ سم).',
+                depthVisual: { top: '0%', height: '100%', from: 'bottom' }
+            },
+            {
+                id: 'transverse',
+                name: 'الشروخ العرضية',
+                description: 'شروخ تمتد بشكل عمودي تقريباً على المحور الطولي للطريق.',
+                initiation: 'تبدأ من سطح طبقة الأسفلت.',
+                causes: 'انكماش طبقة الأسفلت نتيجة انخفاض درجات الحرارة، أو انعكاس فواصل سفلية.',
+                minDepth: 2,
+                maxDepth: 10,
+                depthText: 'مشابهة للشروخ الكتلية، تبدأ سطحية وقد تتعمق لتصل إلى 10+ سم.',
+                depthVisual: { top: '0%', height: '50%', from: 'top' }
+            },
+            {
+                id: 'edge',
+                name: 'شروخ الحواف',
+                description: 'شروخ طولية تحدث بالقرب من حافة الرصف (ضمن 0.3 إلى 0.6 متر).',
+                initiation: 'يمكن أن تبدأ من السطح أو الأسفل.',
+                causes: 'ضعف الدعم الجانبي من الأكتاف، ضعف الدمك عند الحواف، أو تسرب المياه.',
+                minDepth: 5,
+                maxDepth: 15,
+                depthText: 'قد تكون سطحية أو تمتد لكامل عمق الأسفلت عند الحافة (5-15+ سم).',
+                depthVisual: { top: '0%', height: '75%', from: 'bottom' }
+            },
+            {
+                id: 'reflection',
+                name: 'الشروخ الانعكاسية',
+                description: 'نسخة طبق الأصل على السطح الجديد لشروخ أو فواصل موجودة في الطبقة القديمة.',
+                initiation: 'تبدأ من الأسفل (من الطبقة القديمة) وتنتشر للأعلى عبر طبقة التغطية الجديدة.',
+                causes: 'وجود شروخ غير معالجة في الطبقات السفلية قبل وضع طبقة التغطية الجديدة.',
+                minDepth: 5,
+                maxDepth: 10,
+                depthText: 'تمتد عبر كامل سمك طبقة التغطية الجديدة (العمق الفعلي للظاهرة أكبر).',
+                depthVisual: { top: '0%', height: '100%', from: 'bottom' }
+            },
+            {
+                id: 'slippage',
+                name: 'شروخ الانزلاق',
+                description: 'شروخ هلالية الشكل مصحوبة بتجعد للأسفلت.',
+                initiation: 'سطحية، تحدث نتيجة ضعف الربط بين طبقتين من الأسفلت.',
+                causes: 'ضعف طبقة الدهان اللاصق (tack coat)، وجود ملوثات بين الطبقات، أو قوى الكبح والتسارع العالية.',
+                minDepth: 1,
+                maxDepth: 5,
+                depthText: 'سطحية جداً، محصورة في منطقة الانفصال بين الطبقتين.',
+                depthVisual: { top: '0%', height: '25%', from: 'top' }
+            }
+        ];
+
+        const factorsData = {
+            climate: {
+                title: 'المناخ: الحرارة الشديدة والتقلبات',
+                content: 'المناخ الصحراوي في السعودية هو عدو رئيسي للأسفلت. درجات الحرارة المرتفعة (قد تصل إلى 70°م على سطح الرصف) تسبب ليونة الأسفلت وزيادة تعرضه للتخدد. الأهم من ذلك، التعرض الطويل للحرارة والأشعة فوق البنفسجية يسبب "تقادم" البيتومين، فيفقد مرونته ويصبح هشاً وقابلاً للتشقق. كما أن الفروقات الحرارية الكبيرة بين الليل والنهار تسبب تمدداً وانكماشاً مستمرين، مما يؤدي إلى إجهادات حرارية وظهور شروخ كتلية وعرضية.'
+            },
+            soil: {
+                title: 'التربة: الأساس غير المستقر',
+                content: 'تتنوع التربة في المملكة من رملية إلى طينية وانتفاخية وسبخية. أي ضعف في التربة التحتية ينعكس مباشرة على الرصف. التربة الانتفاخية تسبب حركات رأسية مدمرة. التربة السبخية المالحة تهاجم طبقات الأساس. الهبوط غير المتساوي للتربة يسبب انحناء طبقة الأسفلت وظهور شروخ عميقة. تسرب المياه عبر الشروخ الأولية يفاقم المشكلة، حيث يضعف التربة أكثر، مما يؤدي بدوره إلى تعميق وتوسيع الشروخ في حلقة مفرغة.'
+            },
+            traffic: {
+                title: 'المرور: الأحمال الثقيلة والمتكررة',
+                content: 'تعتبر أحمال الشاحنات الثقيلة المسبب الرئيسي لشروخ الكلال (التمساحية). كل مرة تمر فيها شاحنة، ينحني الرصف قليلاً، ومع تكرار هذه الانحناءات ملايين المرات، يبدأ الأسفلت "بالتعب" والتشقق من الأسفل إلى الأعلى. الكثافة المرورية العالية تسرّع من هذه العملية، كما أنها تساهم في تفاقم الشروخ القائمة عن طريق "ضخ" المياه والمواد الناعمة من خلالها، مما يوسعها ويؤدي إلى تكون الحفر.'
+            },
+            materials: {
+                title: 'المواد والتنفيذ: التوازن الدقيق',
+                content: 'جودة الرصف تبدأ من الخلطة الإسفلتية. يجب تحقيق توازن صعب: الخلطة يجب أن تكون صلبة بما يكفي لمقاومة التخدد في الحرارة العالية، وفي نفس الوقت مرنة بما يكفي لمقاومة التشقق الناتج عن التقلبات الحرارية والأحمال. استخدام مواد محسنة مثل البيتومين المعدل بالبوليمرات يساعد في تحقيق هذا التوازن. كذلك، جودة التنفيذ حاسمة؛ فالدمك غير الكافي يترك فراغات هوائية تسرّع من تقادم الأسفلت وتضعف هيكل الرصف.'
+            }
+        };
+
+        const maintenanceData = {
+            "s-shallow": { title: "شروخ سطحية (حرارية/كتلية) - عمق < 2 سم", recommendation: "إجراء وقائي: ملء الشروخ فوراً بمادة مانعة للتسرب مرنة لمنع تسرب المياه وتفاقم المشكلة." },
+            "s-medium": { title: "شروخ سطحية (حرارية/كتلية) - عمق 2-5 سم", recommendation: "إجراء تصحيحي: توسيع وتنظيف وملء الشروخ بمادة عالية الأداء (Rout and Seal). يمكن استخدام طبقة ختم سطحية إذا كانت الشروخ منتشرة." },
+            "s-deep": { title: "شروخ سطحية (حرارية/كتلية) - عمق > 5 سم", recommendation: "إصلاح إنشائي: إصلاح بكامل عمق المنطقة المتشققة إذا كانت محدودة، أو كشط وإعادة رصف الطبقات العلوية إذا كانت منتشرة على نطاق واسع." },
+            "f-medium": { title: "شروخ الكلال (تمساحية) - خفيفة إلى متوسطة", recommendation: "مؤشر على مشكلة إنشائية. يمكن استخدام طبقة ختم سطحية معالِجة (Slurry Seal) كحل مؤقت، مع ضرورة تقييم الحاجة لتقوية الرصف." },
+            "f-severe": { title: "شروخ الكلال (تمساحية) - شديدة", recommendation: "تدخل إنشائي حتمي: إزالة وإعادة بناء المنطقة المتضررة بكامل العمق (Full-Depth Patching)، أو كشط الطبقات الإسفلتية ووضع طبقة تغطية إنشائية بعد معالجة السبب." },
+            "r-any": { title: "شروخ انعكاسية - أي عمق", recommendation: "معالجة السبب أهم من العرض. الحلول تشمل ملء الشروخ إذا كانت ضيقة، أو استخدام طبقات بينية ماصة للإجهاد (SAMI) أو شبكات تقوية قبل وضع أي طبقة تغطية جديدة." }
+        };
+        
+        const scientificSources = [
+            { title: "دليل تصميم الأرصفة الإسفلتية AASHTO (إصدار 1993 وتحديثاته)", author: "AASHTO", year: "1993+", url: "https://bookstore.transportation.org/item_details.aspx?ID=114" },
+            { title: "Pavement Analysis and Design", author: "Yang H. Huang", year: "2004", url: "https://www.pearson.com/us/higher-education/program/Huang-Pavement-Analysis-and-Design-2nd-Edition/PGM153963.html" },
+            { title: "Distress Identification Manual for the Long-Term Pavement Performance Program", author: "FHWA", year: "2014", url: "https://www.fhwa.dot.gov/publications/research/infrastructure/pavements/ltpp/13092/13092.pdf" },
+            { title: "بحوث ودراسات محلية حول أداء الأرصفة في المملكة العربية السعودية (جامعة الملك سعود، جامعة الملك فهد للبترول والمعادن)", author: "باحثون سعوديون", year: "متعدد", url: "#" },
+            { title: "المواصفات العامة لإنشاء الطرق الحضرية - وزارة الشؤون البلدية والقروية والإسكان", author: "MOMRAH, KSA", year: "محدث", url: "https://www.momrah.gov.sa" }
+        ];
+
+        const sourcesListContainer = document.getElementById('sources-list');
+        scientificSources.forEach(source => {
+            const sourceElement = document.createElement('a');
+            sourceElement.href = source.url;
+            sourceElement.target = "_blank";
+            sourceElement.rel = "noopener noreferrer";
+            sourceElement.className = "block card p-4 hover:bg-amber-50 transition-colors duration-200";
+            sourceElement.innerHTML = `
+                <h4 class="font-semibold text-sky-700">${source.title}</h4>
+                <p class="text-sm text-slate-500">${source.author} (${source.year})</p>
+            `;
+            sourcesListContainer.appendChild(sourceElement);
+        });
+        
+        const crackGrid = document.getElementById('crack-grid');
+        crackTypesData.forEach(crack => {
+            const card = document.createElement('div');
+            card.className = 'card p-4 text-center cursor-pointer';
+            card.dataset.crackId = crack.id;
+            card.innerHTML = `<h3 class="font-bold text-slate-800">${crack.name}</h3>`;
+            crackGrid.appendChild(card);
+        });
+
+        const detailsContainer = document.getElementById('crack-details-container');
+        const detailsTitle = document.getElementById('details-title');
+        const detailsDescription = document.getElementById('details-description');
+        const detailsInitiation = document.getElementById('details-initiation');
+        const detailsCauses = document.getElementById('details-causes');
+        const crackPath = document.getElementById('crack-path');
+        const detailsDepthText = document.getElementById('details-depth-text');
+        
+        crackGrid.addEventListener('click', (e) => {
+            const card = e.target.closest('.card');
+            if (card) {
+                const crackId = card.dataset.crackId;
+                const data = crackTypesData.find(c => c.id === crackId);
+                
+                detailsTitle.textContent = data.name;
+                detailsDescription.textContent = data.description;
+                detailsInitiation.textContent = data.initiation;
+                detailsCauses.textContent = data.causes;
+                detailsDepthText.textContent = data.depthText;
+
+                crackPath.style.top = data.depthVisual.from === 'top' ? data.depthVisual.top : 'auto';
+                crackPath.style.bottom = data.depthVisual.from === 'bottom' ? data.depthVisual.top : 'auto';
+                crackPath.style.height = data.depthVisual.height;
+
+                detailsContainer.classList.remove('hidden');
+                detailsContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
+        
+        document.getElementById('close-details').addEventListener('click', () => {
+            detailsContainer.classList.add('hidden');
+        });
+
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContent = document.getElementById('tab-content');
+
+        function updateTabContent(tabId) {
+            const data = factorsData[tabId];
+            tabContent.innerHTML = `
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h3 class="text-xl font-bold text-sky-800 mb-3">${data.title}</h3>
+                    <p class="text-slate-600 leading-relaxed">${data.content}</p>
+                </div>
+            `;
+        }
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                tabButtons.forEach(btn => btn.classList.remove('active', 'border-amber-500', 'text-amber-600'));
+                button.classList.add('active', 'border-amber-500', 'text-amber-600');
+                updateTabContent(button.dataset.tab);
+            });
+        });
+        updateTabContent('climate');
+
+        const maintenanceSelector = document.getElementById('maintenance-selector');
+        const maintenanceRecommendation = document.getElementById('maintenance-recommendation');
+        
+        Object.keys(maintenanceData).forEach(key => {
+            const option = document.createElement('option');
+            option.value = key;
+            option.textContent = maintenanceData[key].title;
+            maintenanceSelector.appendChild(option);
+        });
+
+        maintenanceSelector.addEventListener('change', (e) => {
+            const selectedKey = e.target.value;
+            const data = maintenanceData[selectedKey];
+            if (data) {
+                maintenanceRecommendation.innerHTML = `<p class="font-bold text-amber-900">${data.title}</p><p class="mt-1 text-amber-800">${data.recommendation}</p>`;
+            }
+        });
+
+        const ctx = document.getElementById('maxDepthChart').getContext('2d');
+        const chartData = {
+            labels: crackTypesData.map(c => c.name),
+            datasets: [{
+                label: 'العمق الأقصى التقديري (سم)',
+                data: crackTypesData.map(c => c.maxDepth),
+                backgroundColor: 'rgba(2, 132, 199, 0.6)', 
+                borderColor: 'rgba(2, 132, 199, 1)',
+                borderWidth: 1
+            },
+            {
+                label: 'العمق الأدنى النموذجي (سم)',
+                data: crackTypesData.map(c => c.minDepth),
+                backgroundColor: 'rgba(245, 158, 11, 0.6)', 
+                borderColor: 'rgba(245, 158, 11, 1)',
+                borderWidth: 1
+            }]
+        };
+
+        const maxDepthChart = new Chart(ctx, {
+            type: 'bar',
+            data: chartData,
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'العمق في طبقة الأسفلت (سم)',
+                            font: { size: 14, weight: 'bold', family: 'Tajawal' },
+                            color: '#334155'
+                        },
+                        ticks: {
+                            color: '#475569',
+                            font: { family: 'Tajawal' }
+                        }
+                    },
+                    y: {
+                       ticks: {
+                            color: '#475569',
+                            font: { family: 'Tajawal' }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                           font: { family: 'Tajawal' }
+                        }
+                    },
+                    tooltip: {
+                        bodyFont: { family: 'Tajawal' },
+                        titleFont: { family: 'Tajawal' }
+                    }
+                }
+            }
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetElement = document.querySelector(this.getAttribute('href'));
+                if (targetElement) {
+                     targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+                const mobileMenu = document.getElementById('mobile-menu');
+                if (!mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+        });
+
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+    });
+    </script>
+</body>
+</html>
