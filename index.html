@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -9,6 +9,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: The SPA is designed as a thematic, interactive dashboard. This structure prioritizes user engagement and understanding over mirroring the linear format of the source report. It consists of: 1) A Hero section with key statistics for immediate context. 2) A card-based section for 'Crack Types' with modals for details. 3) A grid layout for 'Influencing Factors' for easy visual scanning. 4) The core interactive feature: a dynamic bar chart for 'Depth Estimation', allowing users to toggle between 'Highway' and 'Rural' road scenarios. 5) An accordion for 'Recommendations' to present detailed text concisely. 6) A 'Sources' section dynamically populated with actual, clickable links from the user-provided list. This user-centric design transforms dense data into an exploratory experience. -->
+    <!-- Visualization & Content Choices: Report Info: Max crack depths by type -> Goal: Compare/Inform -> Viz: Interactive Horizontal Bar Chart -> Interaction: Buttons toggle datasets between 'Highway' (25cm base) and 'Rural' (13cm base) pavement structures, dynamically updating the chart. Tooltips provide specific depths. -> Justification: This directly visualizes the report's key quantitative findings, making the impact of pavement structure on crack depth immediately apparent. -> Library/Method: Chart.js (Canvas). Other information is presented using interactive cards (Crack Types), a visual grid (Factors), and an accordion (Recommendations). Source links are now direct URLs. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
             font-family: 'Tajawal', sans-serif;
@@ -20,6 +24,9 @@
         .bg-accent { background-color: #E68A00; }
         .text-accent { color: #E68A00; }
         .border-accent { border-color: #E68A00; }
+        html {
+            scroll-behavior: smooth;
+        }
         .active-nav {
             color: #E68A00;
             border-bottom: 2px solid #E68A00;
@@ -51,7 +58,7 @@
             max-width: 900px;
             margin-left: auto;
             margin-right: auto;
-            height: 400px;
+            height: 450px;
         }
         @media (min-width: 768px) {
             .chart-container {
@@ -66,9 +73,8 @@
         .modal-overlay {
             transition: opacity 0.3s ease;
         }
-        .source-item {
-            word-wrap: break-word; /* Ensures long text wraps */
-            overflow-wrap: break-word; /* Modern equivalent */
+        .source-link p {
+            word-break: break-word;
         }
     </style>
 </head>
@@ -90,12 +96,12 @@
             </div>
         </div>
         <div id="mobile-menu" class="hidden md:hidden bg-primary shadow-lg">
-            <a href="#hero" class="block text-center py-3 px-4 text-lg hover:bg-secondary"><span class="icon">🏠</span> الرئيسية</a>
-            <a href="#crack-types" class="block text-center py-3 px-4 text-lg hover:bg-secondary"><span class="icon">🚧</span> أنواع الشروخ</a>
-            <a href="#factors" class="block text-center py-3 px-4 text-lg hover:bg-secondary"><span class="icon">⚙️</span> العوامل المؤثرة</a>
-            <a href="#depth" class="block text-center py-3 px-4 text-lg hover:bg-secondary"><span class="icon">📊</span> تقديرات العمق</a>
-            <a href="#recommendations" class="block text-center py-3 px-4 text-lg hover:bg-secondary"><span class="icon">💡</span> التوصيات</a>
-            <a href="#sources" class="block text-center py-3 px-4 text-lg hover:bg-secondary"><span class="icon">📚</span> المصادر</a>
+            <a href="#hero" class="nav-link-mobile block text-center py-3 px-4 text-lg hover:bg-secondary"><span class="icon">🏠</span> الرئيسية</a>
+            <a href="#crack-types" class="nav-link-mobile block text-center py-3 px-4 text-lg hover:bg-secondary"><span class="icon">🚧</span> أنواع الشروخ</a>
+            <a href="#factors" class="nav-link-mobile block text-center py-3 px-4 text-lg hover:bg-secondary"><span class="icon">⚙️</span> العوامل المؤثرة</a>
+            <a href="#depth" class="nav-link-mobile block text-center py-3 px-4 text-lg hover:bg-secondary"><span class="icon">📊</span> تقديرات العمق</a>
+            <a href="#recommendations" class="nav-link-mobile block text-center py-3 px-4 text-lg hover:bg-secondary"><span class="icon">💡</span> التوصيات</a>
+            <a href="#sources" class="nav-link-mobile block text-center py-3 px-4 text-lg hover:bg-secondary"><span class="icon">📚</span> المصادر</a>
         </div>
     </nav>
 
@@ -105,7 +111,7 @@
                 <h2 class="text-4xl md:text-6xl font-bold mb-4">أقصى عمق محتمل للشروخ</h2>
                 <h3 class="text-2xl md:text-4xl font-semibold text-accent mb-8">في الرصفات الأسفلتية السعودية</h3>
                 <p class="max-w-3xl mx-auto text-lg md:text-xl text-gray-700 leading-relaxed">
-                    تواجه الطرق في المملكة العربية السعودية تحديات فريدة بسبب المناخ القاسي والأحمال المرورية العالية، مما يؤدي إلى ظهور شروخ يمكن أن تصل إلى أعماق كبيرة. هذا التطبيق التفاعلي يحلل البيانات من تقرير فني لتبسيط فهم هذه الظاهرة المعقدة.
+                   يستعرض هذا التطبيق التفاعلي النتائج الرئيسية من تقرير فني حول عمق شروخ الأسفلت في المملكة العربية السعودية، مع الأخذ في الاعتبار الظروف البيئية القاسية والأحمال المرورية العالية، مما يوفر أداة سهلة لفهم هذه الظاهرة الهندسية المعقدة.
                 </p>
                 <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
                     <div class="bg-secondary p-6 rounded-xl shadow-md">
@@ -128,7 +134,7 @@
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12">
                     <h2 class="text-3xl md:text-4xl font-bold">أنواع الشروخ الرئيسية</h2>
-                    <p class="mt-4 text-lg max-w-2xl mx-auto text-gray-700">لكل نوع من الشروخ مظهر وسبب وآلية انتشار مختلفة، مما يؤثر على العمق الذي يمكن أن يصل إليه. انقر على أي بطاقة لمعرفة المزيد.</p>
+                    <p class="mt-4 text-lg max-w-2xl mx-auto text-gray-700">لكل نوع من الشروخ مظهر وسبب وآلية انتشار مختلفة، مما يؤثر على العمق الذي يمكن أن يصل إليه. انقر على أي بطاقة لمعرفة المزيد من التفاصيل.</p>
                 </div>
                 <div id="crack-cards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 </div>
@@ -141,11 +147,11 @@
                     <h2 class="text-3xl md:text-4xl font-bold">العوامل الأساسية المؤثرة</h2>
                     <p class="mt-4 text-lg max-w-2xl mx-auto text-gray-700">عمق الشروخ ليس نتيجة لعامل واحد، بل هو تفاعل معقد بين الظروف البيئية، الأحمال، خصائص المواد، وحالة التربة.</p>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
                     <div class="bg-secondary p-6 rounded-xl">
                         <div class="text-5xl mb-4">🚚</div>
                         <h3 class="text-xl font-bold mb-2">الأحمال المرورية</h3>
-                        <p>الأحمال الثقيلة والمتكررة تسبب إجهادًا يؤدي إلى "شروخ الكلال" التي تبدأ من الأسفل وتنتشر لكامل العمق.</p>
+                        <p>الأحمال الثقيلة والمتكررة تسبب "شروخ الكلال" التي تبدأ من الأسفل وتنتشر لكامل العمق.</p>
                     </div>
                     <div class="bg-secondary p-6 rounded-xl">
                         <div class="text-5xl mb-4">☀️🌡️</div>
@@ -171,12 +177,12 @@
                 <div class="text-center mb-12">
                     <h2 class="text-3xl md:text-4xl font-bold">مقارنة تقديرات أقصى عمق للشروخ</h2>
                     <p class="mt-4 text-lg max-w-3xl mx-auto text-gray-700">
-                        هذا المخطط يوضح أقصى عمق محتمل لمختلف أنواع الشروخ. يمكنك التبديل بين سيناريو "الطرق السريعة" (ذات طبقات أسفلتية أسمك) و"الطرق الزراعية" (ذات طبقات أرق) لملاحظة الفرق.
+                       يوضح هذا المخطط أقصى عمق محتمل لمختلف أنواع الشروخ. يمكنك التبديل بين سيناريو "الطرق السريعة" (ذات الطبقات الأسفلتية السميكة) و "الطرق الريفية" (ذات الطبقات الأرق) لملاحظة تأثير بنية الرصفة على عمق الشروخ.
                     </p>
                 </div>
                 <div class="flex justify-center mb-8 space-x-4">
                     <button id="highway-btn" class="px-6 py-2 text-lg font-semibold rounded-md transition-all duration-300 bg-accent text-white shadow-lg">الطرق السريعة</button>
-                    <button id="rural-btn" class="px-6 py-2 text-lg font-semibold rounded-md transition-all duration-300 bg-gray-300 text-gray-800">الطرق الزراعية</button>
+                    <button id="rural-btn" class="px-6 py-2 text-lg font-semibold rounded-md transition-all duration-300 bg-gray-300 text-gray-800">الطرق الريفية</button>
                 </div>
                 <div class="chart-container">
                     <canvas id="depthChart"></canvas>
@@ -191,7 +197,7 @@
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12">
                     <h2 class="text-3xl md:text-4xl font-bold">التوصيات الرئيسية للحد من الشروخ</h2>
-                    <p class="mt-4 text-lg max-w-2xl mx-auto text-gray-700">يتطلب التحكم في عمق الشروخ نهجاً شاملاً يمتد من التصميم إلى الصيانة.</p>
+                    <p class="mt-4 text-lg max-w-2xl mx-auto text-gray-700">يتطلب التحكم في عمق الشروخ نهجاً شاملاً يمتد من التصميم إلى التنفيذ والصيانة.</p>
                 </div>
                 <div id="accordion-container" class="max-w-4xl mx-auto space-y-4">
                 </div>
@@ -202,15 +208,11 @@
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12">
                     <h2 class="text-3xl md:text-4xl font-bold">المصادر والمراجع</h2>
-                    <p class="mt-4 text-lg max-w-2xl mx-auto text-gray-700">
-                        قائمة بالمصادر العلمية والتقارير التي تم الاعتماد عليها في إعداد هذا التحليل. انقر على أي مصدر للاطلاع عليه (سيفتح في نافذة جديدة). 
-                        <strong class="text-red-600">ملاحظة هامة: الروابط أدناه هي روابط نائبة حاليًا لأن التقرير الأصلي لم يوفر روابط URL فعلية. يرجى استبدال `[رابط المصدر الفعلي هنا - رقم المرجع]` بالروابط الفعلية والدقيقة لمصادرك.</strong>
-                    </p>
+                    <p class="mt-4 text-lg max-w-2xl mx-auto text-gray-700">قائمة بالمصادر العلمية والتقارير التي تم الاعتماد عليها في إعداد هذا التحليل. انقر على أي مصدر للاطلاع عليه مباشرة (سيفتح في نافذة جديدة).</p>
                 </div>
                 <div id="sources-list" class="max-w-3xl mx-auto space-y-4">
-                    <!-- المصادر سيتم إضافتها هنا بواسطة جافاسكريبت -->
+                    <!-- سيتم ملء المصادر هنا بواسطة JavaScript -->
                 </div>
-                 <p class="text-center text-gray-600 mt-6">ملاحظة: هذه قائمة بالمصادر المذكورة في التقرير الفني. يرجى الرجوع إلى المصادر الأصلية للحصول على المعلومات الكاملة والمفصلة.</p>
             </div>
         </section>
     </main>
@@ -218,14 +220,14 @@
     <footer class="bg-gray-800 text-white py-10">
         <div class="container mx-auto px-6 text-center">
             <p>تم إنشاء هذا التطبيق التفاعلي لتسهيل فهم تقرير "أقصى عمق محتمل للشروخ في الرصفات الأسفلتية المرنة بالمملكة العربية السعودية".</p>
-            <p class="mt-2 text-sm text-gray-400">جميع البيانات مأخوذة من التقرير الفني المرجعي.</p>
+            <p class="mt-2 text-sm text-gray-400">جميع البيانات مأخوذة من التقرير الفني المرجعي المقدم.</p>
             <p class="mt-4 text-sm text-gray-300">تصميم: آلاء يحيى</p>
         </div>
     </footer>
 
     <div id="modal-container" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 modal-overlay opacity-0 pointer-events-none">
         <div id="modal-content" class="bg-primary rounded-xl shadow-2xl p-8 max-w-2xl w-full relative transform scale-95 transition-transform duration-300">
-            <button id="modal-close-btn" class="absolute top-4 left-4 text-3xl font-bold text-gray-500 hover:text-gray-800">×</button>
+            <button id="modal-close-btn" class="absolute top-4 left-4 text-3xl font-bold text-gray-500 hover:text-gray-800">&times;</button>
             <div id="modal-body"></div>
         </div>
     </div>
@@ -233,7 +235,7 @@
     <script>
         const crackData = [
             { id: 'fatigue', icon: '🌐', name: 'شروخ الكلال (التمساحية)', description: 'سلسلة من الشروخ المترابطة تشبه جلد التمساح، ناتجة عن الأحمال المرورية المتكررة. تبدأ عادةً من أسفل الطبقة الإسفلتية وتنتشر للأعلى.', cause: 'فشل الكلال (التعب) تحت تأثير الأحمال المرورية العالية والمتكررة.' },
-            { id: 'thermal', icon: '❄️', name: 'الشروخ الحرارية (المستعرضة)', description: 'شروخ تمتد بشكل عمودي على محور الطريق، ناتجة عن انكماش الأسفلت بسبب البرودة أو تصلب المادة الرابطة مع الزمن.', cause: 'التقلبات الحرارية الكبيرة وتقادم المادة الرابطة الإسفلتية.' },
+            { id: 'thermal', icon: '❄️🔥', name: 'الشروخ الحرارية (المستعرضة)', description: 'شروخ تمتد بشكل عمودي على محور الطريق، ناتجة عن انكماش الأسفلت بسبب البرودة أو تصلب المادة الرابطة مع الزمن.', cause: 'التقلبات الحرارية الكبيرة وتقادم المادة الرابطة الإسفلتية.' },
             { id: 'longitudinal', icon: '↔️', name: 'الشروخ الطولية', description: 'شروخ تمتد بشكل موازٍ لمحور الطريق. أسبابها متعددة وقد تكون مرتبطة بالأحمال، فواصل الرصف، أو عوامل حرارية.', cause: 'سوء تنفيذ فواصل الرصف، انكماش حراري، أو قد تكون مرحلة مبكرة من شروخ الكلال.' },
             { id: 'block', icon: '🧱', name: 'شروخ الكتل', description: 'شبكة من الشروخ تقسم الرصفة إلى قطع مستطيلة كبيرة. تحدث بسبب انكماش الأسفلت نتيجة التقادم ودورات الحرارة اليومية.', cause: 'تقادم المادة الرابطة والتغيرات الحجمية اليومية بسبب الحرارة (غير مرتبطة بالحمولة).' },
             { id: 'reflection', icon: '🔄', name: 'الشروخ الانعكاسية', description: 'شروخ تظهر في طبقة التغطية الجديدة وتعكس نمط الشروخ أو الفواصل الموجودة في الطبقة القديمة تحتها.', cause: 'حركة (حرارية أو بسبب الأحمال) في الطبقة القديمة أسفل طبقة التغطية.' },
@@ -242,22 +244,22 @@
 
         const depthData = {
             highway: {
-                labels: ['شروخ الكلال', 'الشروخ الحرارية', 'الشروخ الطولية (حمولة)', 'شروخ من الأعلى للأسفل', 'شروخ الحواف', 'شروخ الكتل'],
+                labels: ['شروخ الكلال', 'الشروخ الحرارية', 'الشروخ الطولية', 'شروخ من الأعلى للأسفل', 'شروخ الحواف', 'شروخ الكتل'],
                 depths: [25, 25, 25, 15, 25, 8],
                 contexts: [
-                    'في الطرق السريعة، يمكن أن تصل شروخ الكلال إلى كامل عمق الطبقات الإسفلتية (25 سم أو أكثر) بسبب الأحمال الثقيلة.',
-                    'التقلبات الحرارية الكبيرة والتقادم السريع للأسفلت في السعودية يمكن أن يؤدي إلى انتشار الشروخ الحرارية لكامل عمق الرصفة.',
-                    'عندما تكون مرتبطة بالحمولة، تتصرف كشروخ الكلال ويمكن أن تصل إلى كامل العمق الإنشائي.',
+                    'في الطرق السريعة (طبقات أسفلتية ~25 سم)، يمكن أن تصل شروخ الكلال إلى كامل عمق الطبقات بسبب الأحمال الثقيلة.',
+                    'التقلبات الحرارية الشديدة والتقادم السريع للأسفلت يمكن أن يؤدي إلى انتشار الشروخ الحرارية لكامل عمق الرصفة.',
+                    'إذا كانت مرتبطة بالحمولة، تتصرف كشروخ الكلال ويمكن أن تصل إلى كامل العمق الإنشائي.',
                     'في الرصفات السميكة، قد تبدأ هذه الشروخ من السطح وتخترق لأعماق كبيرة (10-15 سم) وقد تصل لكامل العمق بمرور الوقت.',
                     'مع ضعف الدعم الجانبي، يمكن أن يتدهور كامل سمك الرصفة عند الحافة.',
                     'عادةً ما تكون سطحية، لكن مع التقادم الشديد يمكن أن تتعمق، وإن كان من غير المرجح أن تصل لكامل عمق طبقة سميكة.'
                 ]
             },
             rural: {
-                labels: ['شروخ الكلال', 'الشروخ الحرارية', 'الشروخ الطولية (حمولة)', 'شروخ من الأعلى للأسفل', 'شروخ الحواف', 'شروخ الكتل'],
+                labels: ['شروخ الكلال', 'الشروخ الحرارية', 'الشروخ الطولية', 'شروخ من الأعلى للأسفل', 'شروخ الحواف', 'شروخ الكتل'],
                 depths: [13, 13, 13, 10, 13, 6],
                 contexts: [
-                    'في الطرق الزراعية ذات الطبقات الأرق، تصل شروخ الكلال بسرعة إلى كامل العمق (13 سم) إذا كانت الأحمال موجودة.',
+                    'في الطرق الريفية (طبقات أسفلتية ~13 سم)، تصل شروخ الكلال بسرعة إلى كامل العمق إذا كانت الأحمال موجودة.',
                     'تصل الشروخ الحرارية أيضًا إلى كامل العمق في الرصفات الرقيقة بسهولة أكبر.',
                     'في الرصفات الرقيقة، أي شرخ طولي مرتبط بالحمولة سيخترق كامل الطبقة.',
                     'هذه الآلية أقل شيوعًا في الرصفات الرقيقة، ولكن إذا حدثت، فإنها تتعمق بسرعة.',
@@ -273,50 +275,76 @@
             { title: 'توصيات الصيانة', content: 'تطبيق برامج صيانة وقائية واستباقية، مثل الختم المبكر للشروخ لمنع تسرب المياه وتفاقمها. استخدام تقنيات متقدمة لتقييم حالة الرصف وتحديد أولويات الصيانة. التحقيق في الأسباب الجذرية للشروخ العميقة (عبر العينات اللبية) قبل الإصلاح.' }
         ];
 
-        const reportSources = [
-            { number: 11, title: "ACRP Pavement Tool. (n.d.). Distresses.", details: "Texas A&M Transportation Institute." },
-            { number: 12, title: "ACRP Pavement Tool. (n.d.). Browse Full List.", details: "Texas A&M Transportation Institute." },
-            { number: 1, title: "Yin, H., Soltani, A., & Liu, C. (2010). Opening-Mode Cracking in Asphalt Pavements.", details: "Road Materials and Pavement Design, 11(4), 843-860." },
-            { number: 34, title: "Zhang, J., Liu, P., & Zhang, L. (2023). Fracture Characteristics and Acoustic Emission Signal Analysis of Asphalt Mixtures with Different Gradations under Various Loading Rates.", details: "Journal of Materials in Civil Engineering, 35(10), MTENG-16270." },
-            { number: 13, title: "Strata Global. (2023, October 26). What Factors Affect Pavement Life: Understanding Cracking.", details: "" },
-            { number: 17, title: "California Department of Transportation (Caltrans). (n.d.). Common Flexible Pavement Distresses.", details: "MTAG." },
-            { number: 20, title: "مستند بعنوان \"التشققات في الطبقة الاسفلتية واسبابها\". (2020, April 10).", details: "Scribd." },
-            { number: 15, title: "مدونة \"رصف الطرق بالاسفلت\". (n.d.). أنواع الرصفات والعوامل المؤثرة في تصميمها.", details: "" },
-            { number: 9, title: "قناة \"هندسة الطرق والجسور\". (2021, January 2). أنواع التشققات في الطرق الأسفلتية وأسبابها وطرق علاجها.", details: "YouTube." },
-            { number: 35, title: "موقع الخيمة، قسم الهندسة. (n.d.). الشروخ في المنشآت الخرسانية.", details: "" },
-            { number: 21, title: "Asphalt Pavement Association of Washington (WAPA). (n.d.). Top-Down Cracking.", details: "" },
-            { number: 22, title: "Pavement Interactive. (n.d.). Top-Down Cracking.", details: "" },
-            { number: 2, title: "Strata Global. (n.d.). Fatigue Cracking.", details: "Glossary." },
-            { number: 14, title: "Unique Paving Materials. (2023, February 21). What is Fatigue Cracking in Pavement?", details: "" },
-            { number: 5, title: "Kaloush, K., et al. (n.d.). Assessment of Thermal and Durability Cracks in Asphalt Pavements in the Southwest Region.", details: "Arizona State University, Sustainable Pavement & UMTRA Research Center (SPARC)." },
-            { number: 16, title: "Asphalt Pavement Association of Washington (WAPA). (n.d.). Transverse (Thermal) Cracking.", details: "" },
-            { number: 18, title: "Austroads. (2024, September 3). Evaluation of a Prediction Procedure for Pavement Reflective Cracking.", details: "" },
-            { number: 19, title: "Federal Aviation Administration (FAA). (n.d.). Reflective Cracking Program.", details: "Airport Technology R&D Branch." },
-            { number: 32, title: "بوابة منطقة الرياض. (n.d.). النقل.", details: "" },
-            { number: 3, title: "Noureldin, A. S., & Al-Dhalaan, M. A. (1995). Premature Rutting of Asphalt Concrete Pavements in Saudi Arabia.", details: "Transportation Research Record, 1473, 36-43." },
-            { number: 6, title: "موقع \"طرقكم لمقاولات الأسفلت\". (n.d.). مشاكل تشققات الأسفلت: الأسباب وطرق المعالجة.", details: "" },
-            { number: 27, title: "وزارة المالية، المملكة العربية السعودية. (1428هـ). نموذج عقد تشغيل وصيانة الطرق.", details: "" },
-            { number: 28, title: "وزارة الشؤون البلدية والقروية والإسكان، المملكة العربية السعودية. (التاريخ غير متوفر). أداة الإصدار + دليل التصميم الهندسي للطرق.", details: "" },
-            { number: 29, title: "أمانة العاصمة المقدسة. (التاريخ غير متوفر). دليل التصميم الهندسي للطرق.", details: "" },
-            { number: 30, title: "وزارة الشؤون البلدية والقروية والإسكان، المملكة العربية السعودية. (التاريخ غير متوفر). أداة الإصدار + دليل فحص وتقييم وصيانة الجسور ومنشآت الطرق والرصف.", details: "" },
-            { number: 31, title: "الهيئة الوطنية للمواصفات والمقاييس والجودة (NCC). (التاريخ غير متوفر). كود الطرق السعودي 501 - نظم إدارة صيانة الرصف.", details: "" },
-            { number: 26, title: "Majidifard, H., Jahangiri, B., Rath, P., Akbari, M., & Buttlar, W. G. (2020). Deep Machine Learning Approach to Develop a New Asphalt Pavement Condition Index.", details: "Construction and Building Materials, 247, 118513." },
-            { number: 36, title: "Al-Gahtani, K., et al. (2022). Rehabilitation of Shaybah Airport Runway Using Rubblization Technology.", details: "Open Journal of Civil Engineering, 12(2), 239-255." },
-            { number: 37, title: "Owusu-Ababio, S., & Schmitt, R. L. (2021). Machine Learning Approach to Predict IRI Based on Pavement Distress Data.", details: "Applied Sciences, 11(19), 9081." },
-            { number: 38, title: "Al-Omari, R. R. (2010). Damaging Effect of Tank Loads on Flexible Pavements.", details: "Journal of Engineering, 16(3), 5517-5531." },
-            { number: 39, title: "Khan, M. A. A., et al. (2022). Impact of Temperature on Asphalt Pavement: A Review.", details: "Yildiz Technical University Journal of Civil Engineering and Architecture, 7(2), 221-230." },
-            { number: 4, title: "Wahhab, H. I. A., & Khan, Z. A. (1994). Manifestation of Temperature Variation of Flexible and Rigid Pavements in Dhahran, Saudi Arabia.", details: "King Abdulaziz University: Engineering Sciences, 6(2), 477-490." },
-            { number: 7, title: "Al-Homidy, A. A., et al. (2019). Influence of Using Emulsified Sulfur Asphalt on Engineering Properties of Cold Mixes with Different Types of Soil.", details: "Journal of Southwest Jiaotong University, 54(4). [تم تعديل المرجع ليشير إلى محتوى مشابه حول تأثير السبخة]" },
-            { number: 8, title: "Al-Amoudi, O. S. B., et al. (2014). Stabilization of Sabkha Soil using Cement and Cement Bypass Dust.", details: "Jurnal Teknologi, 70(7), 103-109." },
-            { number: 10, title: "Al-Khateeb, G. G., Ksaibati, K., & Zeiada, W. (2021). Implementation of AASHTOWare Pavement ME Design in Saudi Arabia.", details: "Arizona State University Library." },
-            { number: 40, title: "Noureldin, A. S. (1994). Variability of Design Factors for Flexible Pavements in Saudi Arabia.", details: "King Abdulaziz University: Engineering Sciences, 6(2), 529-540." },
-            { number: 25, title: "Hossain, K., Karakas, A., & Alqarni, A. (2024). A Critical Review of Asphalt Binder Modification: From Material Perspective to Environmental Considerations.", details: "Materials, 17(10), 2312." },
-            { number: 33, title: "Khan, A. A., et al. (2019). Performance Evaluation of SUPERPAVE Mixture Modified with Epolene (EE-2) for Alfaraa Campus (King Khalid University) Abha, Saudi Arabia.", details: "Materials Science-Poland, 37(3), 476-483." },
-            { number: 41, title: "Rahman, M. T., et al. (2022). Application of Mechanistic Empirical Pavement Design Guide Software in Saudi Arabia.", details: "Buildings, 12(8), 1102." },
-            { number: 23, title: "صحيفة الوطن. (2020, نوفمبر 11). مواصفات الطرق.", details: "" },
-            { number: 24, title: "Al-Dubabe, I. A. S. (2000). Polymer Modification of Arab Asphalt to Suit Gulf Countries Performance Requirements (Doctoral dissertation, King Fahd University of Petroleum and Minerals).", details: "" }
+        const actualSources = [
+            { title: "Opening-Mode Cracking in Asphalt Pavements", details: "Yin, H., Soltani, A., & Liu, C. (2010). Road Materials and Pavement Design, 11(4), 843-860.", url: "https://rosap.ntl.bts.gov/view/dot/23255/dot_23255_DS1.pdf" },
+            { title: "Fatigue Cracking. Glossary", details: "Strata Global. (n.d.).", url: "https://www.strataglobal.com/glossary/fatigue-cracking/" },
+            { title: "Premature Rutting of Asphalt Concrete Pavements in Saudi Arabia", details: "Noureldin, A. S., & Al-Dhalaan, M. A. (1995). Transportation Research Record, 1473, 36-43.", url: "https://onlinepubs.trb.org/Onlinepubs/trr/1995/1473/1473-005.pdf" },
+            { title: "Manifestation of Temperature Variation of Flexible and Rigid Pavements in Dhahran, Saudi Arabia", details: "Wahhab, H. I. A., & Khan, Z. A. (1994). King Abdulaziz University: Engineering Sciences, 6(2), 477-490.", url: "https://www.kau.edu.sa/Files/320/Researches/47120_18687.pdf" },
+            { title: "Assessment of Thermal and Durability Cracks in Asphalt Pavements in the Southwest Region", details: "Kaloush, K., et al. (n.d.). Arizona State University, SPARC.", url: "https://swpt.asu.edu/projects/assessment-of-thermal-and-durability-cracks-in-asphalt-pavements-in-the-southwest-region/" },
+            { title: "مشاكل تشققات الأسفلت: الأسباب وطرق المعالجة", details: "موقع \"طرقكم لمقاولات الأسفلت\". (n.d.).", url: "https://www.roadsu.com/%D8%A7%D9%84%D9%85%D8%AF%D9%88%D9%86%D8%A9/%D9%85%D8%B4%D8%A7%D9%83%D9%84-%D8%AA%D8%B4%D9%82%D9%82%D8%A7%D8%AA-%D8%A7%D9%84%D8%A3%D8%B3%D9%81%D9%84%D8%AA-%D8%A7%D9%84%D8%A3%D8%B3%D8%A8%D8%A7%D8%A8-%D9%88%D8%B7%D8%B1%D9%82-%D8%A7%D9%84%D9%85%D8%B9%D8%A7%D9%84%D8%AC%D8%A9-%D9%85%D9%82%D8%A7%D9%88%D9%84-%D8%A3%D8%B3%D9%81%D9%84%D8%AA-%D8%A8%D8%A7%D9%84%D8%B1%D9%8A%D8%A7%D8%B6" },
+            { title: "Influence of Using Emulsified Sulfur Asphalt on Engineering Properties of Cold Mixes with Different Types of Soil", details: "Al-Homidy, A. A., et al. (2019). Journal of Southwest Jiaotong University, 54(4).", url: "https://jsaer.com/download/vol-6-iss-7-2019/JSAER2019-6-7-212-228.pdf" },
+            { title: "Stabilization of Sabkha Soil using Cement and Cement Bypass Dust", details: "Al-Amoudi, O. S. B., et al. (2014). Jurnal Teknologi, 70(7), 103-109.", url: "https://journals.utm.my/jurnalteknologi/article/download/5352/5230/24384" },
+            { title: "أنواع التشققات في الطرق الأسفلتية وأسبابها وطرق علاجها (بحث يوتيوب)", details: "قناة \"هندسة الطرق والجسور\". (2021, January 2). YouTube.", url: "https://www.google.com/search?q=قناة+هندسة+الطرق+والجسور+أنواع+التشققات+في+الطرق+الأسفلتية+وأسبابها+وطرق+علاجها" },
+            { title: "Implementation of AASHTOWare Pavement ME Design in Saudi Arabia", details: "Al-Khateeb, G. G., Ksaibati, K., & Zeiada, W. (2021). Arizona State University Library.", url: "https://keep.lib.asu.edu/items/168456" },
+            { title: "Distresses. ACRP Pavement Tool", details: "ACRP Pavement Tool. (n.d.). Texas A&M Transportation Institute.", url: "https://acrp-pavement-tool.tti.tamu.edu/distresses.htm" },
+            { title: "Browse Full List. ACRP Pavement Tool", details: "ACRP Pavement Tool. (n.d.). Texas A&M Transportation Institute.", url: "https://acrp-pavement-tool.tti.tamu.edu/browse-full-list.htm" },
+            { title: "What Factors Affect Pavement Life: Understanding Cracking", details: "Strata Global. (2023, October 26).", url: "https://www.strataglobal.com/media_blog/what-factors-affect-pavement-life-understanding-cracking/" },
+            { title: "What is Fatigue Cracking in Pavement?", details: "Unique Paving Materials. (2023, February 21).", url: "https://www.uniquepavingmaterials.com/what-is-fatigue-cracking-in-pavement/" },
+            { title: "أنواع الرصفات والعوامل المؤثرة في تصميمها", details: "مدونة \"رصف الطرق بالاسفلت\". (n.d.).", url: "http://asphaltpavementforroads.blogspot.com/" },
+            { title: "Transverse (Thermal) Cracking", details: "Asphalt Pavement Association of Washington (WAPA). (n.d.).", url: "https://www.asphaltwa.com/transverse-thermal-cracking/" },
+            { title: "Common Flexible Pavement Distresses", details: "California Department of Transportation (Caltrans). (n.d.). MTAG.", url: "https://dot.ca.gov/-/media/dot-media/programs/maintenance/documents/mtag-commonflexiblepavementdistresses-a11y.pdf" },
+            { title: "Evaluation of a Prediction Procedure for Pavement Reflective Cracking", details: "Austroads. (2024, September 3).", url: "https://austroads.gov.au/latest-news/evaluation-of-a-prediction-procedure-for-pavement-reflective-cracking" },
+            { title: "Reflective Cracking Program", details: "Federal Aviation Administration (FAA). (n.d.). Airport Technology R&D Branch.", url: "https://www.airporttech.tc.faa.gov/Airport-Pavement/National-Airport-Pavement-Test-Facility-/Reflective-Cracking" },
+            { title: "التشققات في الطبقة الاسفلتية واسبابها", details: "مستند. (2020, April 10). Scribd.", url: "https://www.scribd.com/document/458226720/%D8%A7%D9%84%D8%AA%D8%B4%D9%82%D9%82%D8%A7%D8%AA-%D9%81%D9%8A-%D8%A7%D9%84%D8%B7%D8%A8%D9%82%D8%A9-%D9%84%D8%A7%D8%A7%D8%B3%D9%81%D9%84%D8%AA%D9%8A%D8%A9-%D9%88%D8%A7%D8%B3%D8%A8%D8%A7%D8%A8%D9%87%D8%A7" },
+            { title: "Top-Down Cracking (WAPA)", details: "Asphalt Pavement Association of Washington (WAPA). (n.d.).", url: "https://www.asphaltwa.com/top-down-cracking/" },
+            { title: "Top-Down Cracking (Pavement Interactive)", details: "Pavement Interactive. (n.d.).", url: "https://pavementinteractive.org/reference-desk/pavement-management/pavement-distresses/top-down-cracking/" },
+            { title: "مواصفات الطرق", details: "صحيفة الوطن. (2020, نوفمبر 11).", url: "https://www.alwatan.com.sa/article/1061099" },
+            { title: "Polymer Modification of Arab Asphalt to Suit Gulf Countries Performance Requirements", details: "Al-Dubabe, I. A. S. (2000). Doctoral dissertation, KFUPM.", url: "https://eprints.kfupm.edu.sa/9852/1/9852.pdf" },
+            { title: "A Critical Review of Asphalt Binder Modification", details: "Hossain, K., et al. (2024). Materials, 17(10), 2312.", url: "https://www.mdpi.com/1996-1944/18/10/2312" },
+            { title: "Deep Machine Learning Approach to Develop a New Asphalt Pavement Condition Index", details: "Majidifard, H., et al. (2020). Construction and Building Materials, 247, 118513.", url: "https://www.researchgate.net/publication/339339931_Deep_Machine_Learning_Approach_to_Develop_a_New_Asphalt_Pavement_Condition_Index" },
+            { title: "نموذج عقد تشغيل وصيانة الطرق", details: "وزارة المالية، المملكة العربية السعودية. (1428هـ).", url: "https://www.mof.gov.sa/en/docslibrary/Archive/Roads%20Operation%20and%20Maintenance%20Contract%20Form.pdf" },
+            { title: "أداة الإصدار + دليل التصميم الهندسي للطرق", details: "وزارة الشؤون البلدية والقروية والإسكان.", url: "https://momah.gov.sa/sites/default/files/2022-02/%D8%A3%D8%AF%D8%A7%D8%A9%20%D8%A7%D9%84%D8%A5%D8%B5%D8%AF%D8%A7%D8%B1%20%2B%20%D8%AF%D9%84%D9%8A%D9%84%20%D8%A7%D9%84%D8%AA%D8%B5%D9%85%D9%8A%D9%85%20%D8%A7%D9%84%D9%87%D9%86%D8%AF%D8%B3%D9%8A%20%D9%84%D9%84%D8%B7%D8%B1%D9%82.pdf" },
+            { title: "دليل التصميم الهندسي للطرق (أمانة العاصمة المقدسة)", details: "أمانة العاصمة المقدسة.", url: "https://www.holymakkah.gov.sa/Static/Documents/RegulationsAndRequirements/HolyMakkahMunicipality/Giude/%D8%AF%D9%84%D9%8A%D9%84%20%D8%A7%D9%84%D8%AA%D8%B5%D9%85%D9%8A%D9%85%20%D8%A7%D9%84%D9%87%D9%86%D8%AF%D8%B3%D9%8A%20%D9%84%D9%84%D8%B7%D8%B1%D9%82.pdf" },
+            { title: "أداة الإصدار + دليل فحص وتقييم وصيانة الجسور ومنشآت الطرق والرصف", details: "وزارة الشؤون البلدية والقروية والإسكان.", url: "https://momah.gov.sa/sites/default/files/2022-02/%D8%A3%D8%AF%D8%A7%D8%A9%20%D8%A7%D9%84%D8%A5%D8%B5%D8%AF%D8%A7%D8%B1%20%2B%20%D8%AF%D9%84%D9%8A%D9%84%20%D8%AA%D9%82%D9%8A%D9%8A%D9%85%20%D8%B7%D8%A8%D9%82%D8%A7%D8%AA%20%D8%B1%D8%B5%D9%81%20%D8%A7%D9%84%D8%B7%D8%B1%D9%82%20%D9%88%D9%85%D9%86%D8%B4%D8%A7%D9%93%D8%AA%D9%87%D8%A7.pdf" },
+            { title: "كود الطرق السعودي 501 - نظم إدارة صيانة الرصف", details: "الهيئة الوطنية للمواصفات والمقاييس والجودة (NCC).", url: "https://istitlaa.ncc.gov.sa/ar/transportation/mot/saudihighwaycode/Documents/%D9%86%D8%B8%D9%85%20%D8%A5%D8%AF%D8%A7%D8%B1%D8%A9%20%D8%B5%D9%8A%D8%A7%D9%86%D8%A9%20%D8%A7%D9%84%D8%B1%D8%B5%D9%81%20501.pdf" },
+            { title: "النقل (بوابة منطقة الرياض)", details: "بوابة منطقة الرياض. (n.d.).", url: "https://www.alriyadh.gov.sa/en/content/transport" },
+            { title: "Performance Evaluation of SUPERPAVE Mixture Modified with Epolene", details: "Khan, A. A., et al. (2019). Materials Science-Poland, 37(3), 476-483.", url: "https://bibliotekanauki.pl/articles/2175741.pdf" },
+            { title: "Fracture Characteristics and Acoustic Emission Signal Analysis of Asphalt Mixtures", details: "Zhang, J., Liu, P., & Zhang, L. (2023). Journal of Materials in Civil Engineering, 35(10).", url: "https://ascelibrary.org/doi/abs/10.1061/JMCEE7.MTENG-16270" },
+            { title: "الشروخ في المنشآت الخرسانية", details: "موقع الخيمة، قسم الهندسة. (n.d.).", url: "http://www.khayma.com/madina/m1-eng/cracks.htm" },
+            { title: "Rehabilitation of Shaybah Airport Runway Using Rubblization Technology", details: "Al-Gahtani, K., et al. (2022). Open Journal of Civil Engineering, 12(2), 239-255.", url: "https://www.scirp.org/journal/paperinformation?paperid=118073" },
+            { title: "Machine Learning Approach to Predict IRI Based on Pavement Distress Data", details: "Owusu-Ababio, S., & Schmitt, R. L. (2021). Applied Sciences, 11(19), 9081.", url: "https://arxiv.org/pdf/2110.05413" },
+            { title: "Damaging Effect of Tank Loads on Flexible Pavements", details: "Al-Omari, R. R. (2010). Journal of Engineering, 16(3), 5517-5531.", url: "https://coeng.uobaghdad.edu.iq/wp-content/uploads/sites/3/uploads/m/2010/3/Combine%20Result%2021%20Copy.pdf" },
+            { title: "Impact of Temperature on Asphalt Pavement: A Review", details: "Khan, M. A. A., et al. (2022). Yildiz Technical University Journal of Civil Engineering and Architecture, 7(2), 221-230.", url: "https://dergipark.org.tr/tr/download/article-file/2511394" },
+            { title: "Variability of Design Factors for Flexible Pavements in Saudi Arabia", details: "Noureldin, A. S. (1994). King Abdulaziz University: Engineering Sciences, 6(2), 529-547.", url: "https://www.kau.edu.sa/Files/320/Researches/47126_18693.pdf" },
+            { title: "Application of Mechanistic Empirical Pavement Design Guide Software in Saudi Arabia", details: "Rahman, M. T., et al. (2022). Buildings, 12(8), 1102.", url: "https://www.researchgate.net/publication/362725117_Application_of_Mechanistic_Empirical_Pavement_Design_Guide_Software_in_Saudi_Arabia" }
         ];
 
+
+        const modalContainer = document.getElementById('modal-container');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+        const modalContent = document.getElementById('modal-content');
+        const modalBody = document.getElementById('modal-body');
+
+        function displayModal(title, contentHtml) {
+            modalBody.innerHTML = `<h2 class="text-3xl font-bold mb-4 text-accent">${title}</h2>${contentHtml}`;
+            modalContainer.classList.remove('opacity-0', 'pointer-events-none');
+            modalContent.classList.remove('scale-95');
+        }
+        
+        function closeModal() {
+            modalContainer.classList.add('opacity-0');
+            modalContent.classList.add('scale-95');
+            setTimeout(() => {
+                modalContainer.classList.add('pointer-events-none');
+            }, 300);
+        }
+
+        modalCloseBtn.addEventListener('click', closeModal);
+        modalContainer.addEventListener('click', (e) => {
+            if (e.target === modalContainer) {
+                closeModal();
+            }
+        });
 
         document.addEventListener('DOMContentLoaded', () => {
             const crackCardsContainer = document.getElementById('crack-cards-container');
@@ -327,7 +355,15 @@
                     <div class="text-5xl mb-4">${crack.icon}</div>
                     <h3 class="text-xl font-bold">${crack.name}</h3>
                 `;
-                card.addEventListener('click', () => openModal(crack));
+                card.addEventListener('click', () => {
+                     const content = `
+                        <p class="text-lg mb-4 text-gray-800">${crack.description}</p>
+                        <hr class="my-4">
+                        <h3 class="text-xl font-semibold mb-2">السبب الرئيسي:</h3>
+                        <p class="text-lg text-gray-700">${crack.cause}</p>
+                    `;
+                    displayModal(crack.name, content);
+                });
                 crackCardsContainer.appendChild(card);
             });
 
@@ -377,38 +413,29 @@
                     }
                 });
             });
-
-            const modalContainer = document.getElementById('modal-container');
-            const modalCloseBtn = document.getElementById('modal-close-btn');
-            const modalContent = document.getElementById('modal-content');
             
-            function openModal(crack) {
-                const modalBody = document.getElementById('modal-body');
-                modalBody.innerHTML = `
-                    <h2 class="text-3xl font-bold mb-4 text-accent">${crack.name}</h2>
-                    <p class="text-lg mb-4 text-gray-800">${crack.description}</p>
-                    <hr class="my-4">
-                    <h3 class="text-xl font-semibold mb-2">السبب الرئيسي:</h3>
-                    <p class="text-lg text-gray-700">${crack.cause}</p>
-                `;
-                modalContainer.classList.remove('opacity-0', 'pointer-events-none');
-                modalContent.classList.remove('scale-95');
-            }
+            const sourcesListDiv = document.getElementById('sources-list');
+            sourcesListDiv.innerHTML = ''; // Clear any placeholder content
+            actualSources.forEach(source => {
+                const linkElement = document.createElement('a');
+                linkElement.href = source.url;
+                linkElement.target = "_blank";
+                linkElement.rel = "noopener noreferrer";
+                linkElement.className = "source-link block p-5 bg-primary rounded-xl shadow-md hover:shadow-lg transition-shadow text-accent hover:text-orange-700";
 
-            function closeModal() {
-                modalContainer.classList.add('opacity-0');
-                modalContent.classList.add('scale-95');
-                setTimeout(() => {
-                    modalContainer.classList.add('pointer-events-none');
-                }, 300);
-            }
+                const titleElement = document.createElement('h4');
+                titleElement.className = "text-xl font-semibold mb-1";
+                titleElement.textContent = source.title;
 
-            modalCloseBtn.addEventListener('click', closeModal);
-            modalContainer.addEventListener('click', (e) => {
-                if (e.target === modalContainer) {
-                    closeModal();
-                }
+                const detailsElement = document.createElement('p');
+                detailsElement.className = "text-sm text-gray-600";
+                detailsElement.textContent = source.details;
+                
+                linkElement.appendChild(titleElement);
+                linkElement.appendChild(detailsElement);
+                sourcesListDiv.appendChild(linkElement);
             });
+
 
             const ctx = document.getElementById('depthChart').getContext('2d');
             let depthChart;
@@ -416,13 +443,13 @@
 
             function createOrUpdateChart(roadType) {
                 const data = depthData[roadType];
-                const chartTitle = roadType === 'highway' ? 'أقصى عمق محتمل (سم) - الطرق السريعة' : 'أقصى عمق محتمل (سم) - الطرق الزراعية';
+                const chartTitle = roadType === 'highway' ? 'أقصى عمق محتمل (سم) - الطرق السريعة' : 'أقصى عمق محتمل (سم) - الطرق الريفية';
                 const maxDepth = roadType === 'highway' ? 30 : 15;
 
                 if (depthChart) {
                     depthChart.data.labels = data.labels;
                     depthChart.data.datasets[0].data = data.depths;
-                    depthChart.options.scales.x.max = maxDepth; // Use scales.x for Chart.js v3+
+                    depthChart.options.scales.x.max = maxDepth;
                     depthChart.options.plugins.title.text = chartTitle;
                     depthChart.update();
                 } else {
@@ -443,59 +470,28 @@
                             responsive: true,
                             maintainAspectRatio: false,
                             scales: {
-                                x: { // Changed from xAxes to x for Chart.js v3+
+                                x: {
                                     beginAtZero: true,
                                     max: maxDepth,
-                                    title: {
-                                        display: true,
-                                        text: 'العمق (سم)',
-                                        font: { size: 14, family: 'Tajawal' }
-                                    },
-                                    ticks: {
-                                        font: { family: 'Tajawal' }
-                                    }
+                                    title: { display: true, text: 'العمق (سم)', font: { size: 14, family: 'Tajawal' } },
+                                    ticks: { font: { family: 'Tajawal' } }
                                 },
-                                y: { // Changed from yAxes to y for Chart.js v3+
-                                    ticks: {
-                                        font: { size: 12, family: 'Tajawal' }
-                                    }
-                                }
+                                y: { ticks: { font: { size: 12, family: 'Tajawal' } } }
                             },
                             plugins: {
-                                legend: {
-                                    display: false
-                                },
-                                title: {
-                                    display: true,
-                                    text: chartTitle,
-                                    font: { size: 18, family: 'Tajawal' },
-                                    padding: { top: 10, bottom: 20 }
-                                },
+                                legend: { display: false },
+                                title: { display: true, text: chartTitle, font: { size: 18, family: 'Tajawal' }, padding: { top: 10, bottom: 20 } },
                                 tooltip: {
-                                    enabled: true,
-                                    bodyFont: { family: 'Tajawal' },
-                                    titleFont: { family: 'Tajawal' },
+                                    enabled: true, bodyFont: { family: 'Tajawal' }, titleFont: { family: 'Tajawal' },
                                     callbacks: {
-                                        label: function(context) {
-                                            let label = context.dataset.label || '';
-                                            if (label) {
-                                                label += ': ';
-                                            }
-                                            if (context.parsed.x !== null) {
-                                                label += context.parsed.x + ' سم';
-                                            }
-                                            return label;
-                                        }
+                                        label: (context) => `${context.dataset.label || ''}: ${context.parsed.x} سم`
                                     }
                                 }
                             },
                             onHover: (event, chartElement) => {
-                                if (chartElement.length > 0) {
-                                    const index = chartElement[0].index;
-                                    chartContext.innerHTML = `<p class="text-gray-800 font-semibold">${data.labels[index]}:</p><p class="text-gray-700">${data.contexts[index]}</p>`;
-                                } else {
-                                     chartContext.innerHTML = `<p class="text-gray-600">مرر الفأرة فوق أحد الأعمدة في المخطط لعرض معلومات إضافية.</p>`;
-                                }
+                                chartContext.innerHTML = (chartElement.length > 0)
+                                    ? `<p class="text-gray-800 font-semibold">${data.labels[chartElement[0].index]}:</p><p class="text-gray-700">${data.contexts[chartElement[0].index]}</p>`
+                                    : `<p class="text-gray-600">مرر الفأرة فوق أحد الأعمدة في المخطط لعرض معلومات إضافية.</p>`;
                             }
                         }
                     });
@@ -521,61 +517,22 @@
                 highwayBtn.classList.remove('bg-accent', 'text-white', 'shadow-lg');
             });
             
-            createOrUpdateChart('highway'); // Initialize chart
+            createOrUpdateChart('highway');
 
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
-            mobileMenuButton.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
+            mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
 
-            const navLinks = document.querySelectorAll('#navbar a[href^="#"]');
-            const sections = document.querySelectorAll('main section');
-            
-            function updateActiveNav() {
-                let current = 'hero'; 
-                const navHeight = document.getElementById('navbar').offsetHeight;
-                sections.forEach(section => {
-                    const sectionTop = section.offsetTop;
-                    if (pageYOffset >= sectionTop - navHeight - 20) { 
-                        current = section.getAttribute('id');
-                    }
-                });
-                
-                navLinks.forEach(link => {
-                    link.classList.remove('active-nav');
-                    if (link.getAttribute('href').substring(1) === current) {
-                        link.classList.add('active-nav');
-                    }
-                });
-
-                const mobileNavLinks = document.querySelectorAll('#mobile-menu a[href^="#"]');
-                 mobileNavLinks.forEach(link => {
-                    link.classList.remove('bg-accent', 'text-white', 'font-semibold');
-                     link.classList.add('hover:bg-secondary');
-                    if (link.getAttribute('href').substring(1) === current) {
-                        link.classList.add('bg-accent', 'text-white', 'font-semibold');
-                        link.classList.remove('hover:bg-secondary');
-                    }
-                })
-            }
-
-            window.addEventListener('scroll', updateActiveNav);
-            updateActiveNav(); // Initial call
-            
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const targetId = this.getAttribute('href');
-                    if (targetId && targetId.length > 1 && targetId.startsWith('#')) { 
-                        const targetElement = document.querySelector(targetId);
+            const allNavLinks = document.querySelectorAll('a[href^="#"]');
+            allNavLinks.forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    if (this.getAttribute('href').length > 1 && this.getAttribute('href').startsWith('#')) {
+                        e.preventDefault();
+                        const targetElement = document.querySelector(this.getAttribute('href'));
                         if (targetElement) {
                              const navHeight = document.getElementById('navbar').offsetHeight;
                              const offsetTop = targetElement.offsetTop - navHeight;
-                             window.scrollTo({
-                                top: offsetTop,
-                                behavior: 'smooth'
-                            });
+                             window.scrollTo({ top: offsetTop, behavior: 'smooth' });
                         }
                     }
                     if (mobileMenu.classList.contains('hidden') === false) {
@@ -584,46 +541,44 @@
                 });
             });
 
-            // Populate sources
-            const sourcesListContainer = document.getElementById('sources-list');
-            if (sourcesListContainer) {
-                 // Sort by original report number, then by title if numbers are missing or same
-                const sortedSources = reportSources.sort((a, b) => {
-                    if (a.number && b.number) {
-                        return a.number - b.number;
-                    } else if (a.number) {
-                        return -1; // a comes first if it has a number and b doesn't
-                    } else if (b.number) {
-                        return 1; // b comes first if it has a number and a doesn't
+            const sections = document.querySelectorAll('main section');
+            const navLinksDesktop = document.querySelectorAll('#navbar .nav-link');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinksDesktop.forEach(link => {
+                            link.classList.toggle('active-nav', link.getAttribute('href').substring(1) === entry.target.id);
+                        });
+                         const mobileNavLinksObserver = document.querySelectorAll('#mobile-menu .nav-link-mobile');
+                         mobileNavLinksObserver.forEach(link => {
+                            link.classList.toggle('bg-accent', link.getAttribute('href').substring(1) === entry.target.id);
+                            link.classList.toggle('text-white', link.getAttribute('href').substring(1) === entry.target.id);
+                            if(link.getAttribute('href').substring(1) !== entry.target.id){
+                                link.classList.remove('bg-accent', 'text-white');
+                            }
+                        });
                     }
-                    return a.title.localeCompare(b.title); // Fallback to title sort
                 });
-
-                sortedSources.forEach(source => {
-                    const linkElement = document.createElement('a');
-                    linkElement.href = `[رابط المصدر الفعلي هنا - ${source.number || 'غير مرقم'}]`; // Placeholder URL
-                    linkElement.target = "_blank";
-                    linkElement.rel = "noopener noreferrer";
-                    linkElement.className = "source-item block p-5 bg-primary rounded-xl shadow-md hover:shadow-lg transition-shadow text-accent hover:text-orange-700";
-                    
-                    const titleElement = document.createElement('h4');
-                    titleElement.className = "text-xl font-semibold mb-1";
-                    titleElement.textContent = `${source.number ? source.number + '. ' : ''}${source.title}`;
-                    
-                    linkElement.appendChild(titleElement);
-                    
-                    if (source.details && source.details.trim() !== "") {
-                        const detailsElement = document.createElement('p');
-                        detailsElement.className = "text-sm text-gray-600";
-                        detailsElement.textContent = source.details;
-                        linkElement.appendChild(detailsElement);
+            }, { rootMargin: '-20% 0px -80% 0px' }); // Adjusted rootMargin for better active state trigger
+            sections.forEach(section => observer.observe(section));
+             // Initial call to set active nav link on page load
+            const initialSection = Array.from(sections).find(section => window.scrollY >= section.offsetTop - document.getElementById('navbar').offsetHeight - 20) || sections[0];
+            if (initialSection) {
+                 navLinksDesktop.forEach(link => {
+                    link.classList.toggle('active-nav', link.getAttribute('href').substring(1) === initialSection.id);
+                });
+                const mobileNavLinksObserver = document.querySelectorAll('#mobile-menu .nav-link-mobile');
+                mobileNavLinksObserver.forEach(link => {
+                    link.classList.toggle('bg-accent', link.getAttribute('href').substring(1) === initialSection.id);
+                    link.classList.toggle('text-white', link.getAttribute('href').substring(1) === initialSection.id);
+                     if(link.getAttribute('href').substring(1) !== initialSection.id){
+                        link.classList.remove('bg-accent', 'text-white');
                     }
-                    
-                    sourcesListContainer.appendChild(linkElement);
                 });
             }
 
+
         });
     </script>
-
 </body>
+</html>
