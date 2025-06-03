@@ -1,14 +1,4 @@
-المشكلة في الكود الخاص بك هي أن الروابط في قسم "المصادر" تستخدم href="#" كقيمة لخاصية href. هذا يجعل الرابط يشير إلى أعلى الصفحة الحالية بدلاً من فتح ملف PDF أو موقع ويب خارجي.
-
-لإصلاح ذلك، يجب عليك استبدال "#" بالروابط (URLs) الفعلية لملفات PDF أو المواقع التي تريد أن تشير إليها هذه المصادر.
-
-لقد قمت بتعديل الكود الخاص بك ليشمل أمثلة على كيفية القيام بذلك. لقد استبدلت href="#" بروابط أمثلة. يجب عليك استبدال هذه الروابط النموذجية بالروابط الفعلية لمصادرك.
-
-التغييرات الرئيسية موجودة في قسم <section id="sources">. لقد حدثت أيضًا الملاحظة داخل هذا القسم لتوضيح أن الروابط هي أمثلة.
-
-إليك الكود المعدل:
-
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -19,10 +9,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-    <!-- Chosen Palette: Warm Neutrals -->
-    <!-- Application Structure Plan: A single-page application designed as an interactive dashboard. The structure is thematic rather than linear to facilitate user exploration. Key sections include: 1) An introduction with key stats. 2) An interactive card-based section for 'Crack Types'. 3) A visual grid for 'Influencing Factors'. 4) The core interactive element: a dynamic bar chart for 'Depth Estimation' that allows users to toggle between road types (Highway/Rural). 5) An accordion section for 'Recommendations'. 6) A new section for 'Sources' with placeholder links. This structure was chosen to transform a dense technical report into an intuitive, engaging tool for non-experts and professionals alike, focusing on discoverability and direct data interaction. -->
-    <!-- Visualization & Content Choices: Report Info: Crack types and max depths -> Goal: Compare/Inform -> Viz: Interactive Horizontal Bar Chart -> Interaction: User can toggle a button to switch dataset between 'Highway' and 'Rural' road types, which dynamically updates the chart's data and scale -> Justification: This provides a clear, powerful comparison of crack severity under different common scenarios in KSA, making the key quantitative data easily digestible -> Library/Method: Chart.js (Canvas). Influencing factors are presented in a grid with icons for quick recognition. Recommendations are in an accordion. Sources are listed as clickable links (placeholders). Icons updated in navigation. -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
             font-family: 'Tajawal', sans-serif;
@@ -79,6 +65,10 @@
         }
         .modal-overlay {
             transition: opacity 0.3s ease;
+        }
+        .source-item {
+            word-wrap: break-word; /* Ensures long text wraps */
+            overflow-wrap: break-word; /* Modern equivalent */
         }
     </style>
 </head>
@@ -212,23 +202,15 @@
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12">
                     <h2 class="text-3xl md:text-4xl font-bold">المصادر والمراجع</h2>
-                    <p class="mt-4 text-lg max-w-2xl mx-auto text-gray-700">قائمة بالمصادر العلمية والتقارير التي تم الاعتماد عليها في إعداد هذا التحليل. انقر على أي مصدر للاطلاع عليه (سيفتح في نافذة جديدة). <strong class="text-red-600">ملاحظة: تم استبدال الروابط النائبة "#" بأمثلة لروابط فعالة. يرجى استبدال هذه الأمثلة بالروابط الفعلية والدقيقة لمصادرك.</strong></p>
+                    <p class="mt-4 text-lg max-w-2xl mx-auto text-gray-700">
+                        قائمة بالمصادر العلمية والتقارير التي تم الاعتماد عليها في إعداد هذا التحليل. انقر على أي مصدر للاطلاع عليه (سيفتح في نافذة جديدة). 
+                        <strong class="text-red-600">ملاحظة هامة: الروابط أدناه هي روابط نائبة حاليًا لأن التقرير الأصلي لم يوفر روابط URL فعلية. يرجى استبدال `[رابط المصدر الفعلي هنا - رقم المرجع]` بالروابط الفعلية والدقيقة لمصادرك.</strong>
+                    </p>
                 </div>
                 <div id="sources-list" class="max-w-3xl mx-auto space-y-4">
-                    <a href="https://www.mot.gov.sa/sites/default/files/reports/technical_report_asphalt_cracks_sa_2023.pdf" target="_blank" rel="noopener noreferrer" class="block p-5 bg-primary rounded-xl shadow-md hover:shadow-lg transition-shadow text-accent hover:text-orange-700">
-                        <h4 class="text-xl font-semibold mb-1">التقرير الفني المرجعي حول شروخ الأسفلت في السعودية</h4>
-                        <p class="text-sm text-gray-600">الجهة الناشرة، سنة النشر (مثال: وزارة النقل السعودية، 2023)</p>
-                    </a>
-                    <a href="https://www.researchgate.net/publication/example_paper_on_temperature_effects_pavement.pdf" target="_blank" rel="noopener noreferrer" class="block p-5 bg-primary rounded-xl shadow-md hover:shadow-lg transition-shadow text-accent hover:text-orange-700">
-                        <h4 class="text-xl font-semibold mb-1">دراسة حول تأثير درجات الحرارة القصوى على أداء الرصفات الأسفلتية</h4>
-                        <p class="text-sm text-gray-600">اسم الباحث/الباحثين، اسم المجلة العلمية/المؤتمر، سنة النشر</p>
-                    </a>
-                     <a href="https://example.org/asphalt_design_guide_hot_climates.pdf" target="_blank" rel="noopener noreferrer" class="block p-5 bg-primary rounded-xl shadow-md hover:shadow-lg transition-shadow text-accent hover:text-orange-700">
-                        <h4 class="text-xl font-semibold mb-1">دليل تصميم الرصفات الأسفلتية للمناطق الحارة</h4>
-                        <p class="text-sm text-gray-600">معهد أبحاث الطرق أو جهة دولية معتمدة، سنة الإصدار</p>
-                    </a>
-                    <p class="text-center text-gray-600 mt-6">ملاحظة: هذه قائمة مبدئية. يرجى الرجوع إلى التقرير الأصلي للحصول على قائمة المراجع الكاملة والمفصلة.</p>
+                    <!-- المصادر سيتم إضافتها هنا بواسطة جافاسكريبت -->
                 </div>
+                 <p class="text-center text-gray-600 mt-6">ملاحظة: هذه قائمة بالمصادر المذكورة في التقرير الفني. يرجى الرجوع إلى المصادر الأصلية للحصول على المعلومات الكاملة والمفصلة.</p>
             </div>
         </section>
     </main>
@@ -290,6 +272,51 @@
             { title: 'توصيات التنفيذ', content: 'الالتزام الصارم بالمواصفات الفنية. تحقيق الدمك الكافي والمطلوب لجميع الطبقات، مع التركيز على الحواف والفواصل الطولية. المراقبة الدقيقة لدرجات حرارة الخلطة الإسفلتية أثناء الفرش والدمك لضمان المتانة.' },
             { title: 'توصيات الصيانة', content: 'تطبيق برامج صيانة وقائية واستباقية، مثل الختم المبكر للشروخ لمنع تسرب المياه وتفاقمها. استخدام تقنيات متقدمة لتقييم حالة الرصف وتحديد أولويات الصيانة. التحقيق في الأسباب الجذرية للشروخ العميقة (عبر العينات اللبية) قبل الإصلاح.' }
         ];
+
+        const reportSources = [
+            { number: 11, title: "ACRP Pavement Tool. (n.d.). Distresses.", details: "Texas A&M Transportation Institute." },
+            { number: 12, title: "ACRP Pavement Tool. (n.d.). Browse Full List.", details: "Texas A&M Transportation Institute." },
+            { number: 1, title: "Yin, H., Soltani, A., & Liu, C. (2010). Opening-Mode Cracking in Asphalt Pavements.", details: "Road Materials and Pavement Design, 11(4), 843-860." },
+            { number: 34, title: "Zhang, J., Liu, P., & Zhang, L. (2023). Fracture Characteristics and Acoustic Emission Signal Analysis of Asphalt Mixtures with Different Gradations under Various Loading Rates.", details: "Journal of Materials in Civil Engineering, 35(10), MTENG-16270." },
+            { number: 13, title: "Strata Global. (2023, October 26). What Factors Affect Pavement Life: Understanding Cracking.", details: "" },
+            { number: 17, title: "California Department of Transportation (Caltrans). (n.d.). Common Flexible Pavement Distresses.", details: "MTAG." },
+            { number: 20, title: "مستند بعنوان \"التشققات في الطبقة الاسفلتية واسبابها\". (2020, April 10).", details: "Scribd." },
+            { number: 15, title: "مدونة \"رصف الطرق بالاسفلت\". (n.d.). أنواع الرصفات والعوامل المؤثرة في تصميمها.", details: "" },
+            { number: 9, title: "قناة \"هندسة الطرق والجسور\". (2021, January 2). أنواع التشققات في الطرق الأسفلتية وأسبابها وطرق علاجها.", details: "YouTube." },
+            { number: 35, title: "موقع الخيمة، قسم الهندسة. (n.d.). الشروخ في المنشآت الخرسانية.", details: "" },
+            { number: 21, title: "Asphalt Pavement Association of Washington (WAPA). (n.d.). Top-Down Cracking.", details: "" },
+            { number: 22, title: "Pavement Interactive. (n.d.). Top-Down Cracking.", details: "" },
+            { number: 2, title: "Strata Global. (n.d.). Fatigue Cracking.", details: "Glossary." },
+            { number: 14, title: "Unique Paving Materials. (2023, February 21). What is Fatigue Cracking in Pavement?", details: "" },
+            { number: 5, title: "Kaloush, K., et al. (n.d.). Assessment of Thermal and Durability Cracks in Asphalt Pavements in the Southwest Region.", details: "Arizona State University, Sustainable Pavement & UMTRA Research Center (SPARC)." },
+            { number: 16, title: "Asphalt Pavement Association of Washington (WAPA). (n.d.). Transverse (Thermal) Cracking.", details: "" },
+            { number: 18, title: "Austroads. (2024, September 3). Evaluation of a Prediction Procedure for Pavement Reflective Cracking.", details: "" },
+            { number: 19, title: "Federal Aviation Administration (FAA). (n.d.). Reflective Cracking Program.", details: "Airport Technology R&D Branch." },
+            { number: 32, title: "بوابة منطقة الرياض. (n.d.). النقل.", details: "" },
+            { number: 3, title: "Noureldin, A. S., & Al-Dhalaan, M. A. (1995). Premature Rutting of Asphalt Concrete Pavements in Saudi Arabia.", details: "Transportation Research Record, 1473, 36-43." },
+            { number: 6, title: "موقع \"طرقكم لمقاولات الأسفلت\". (n.d.). مشاكل تشققات الأسفلت: الأسباب وطرق المعالجة.", details: "" },
+            { number: 27, title: "وزارة المالية، المملكة العربية السعودية. (1428هـ). نموذج عقد تشغيل وصيانة الطرق.", details: "" },
+            { number: 28, title: "وزارة الشؤون البلدية والقروية والإسكان، المملكة العربية السعودية. (التاريخ غير متوفر). أداة الإصدار + دليل التصميم الهندسي للطرق.", details: "" },
+            { number: 29, title: "أمانة العاصمة المقدسة. (التاريخ غير متوفر). دليل التصميم الهندسي للطرق.", details: "" },
+            { number: 30, title: "وزارة الشؤون البلدية والقروية والإسكان، المملكة العربية السعودية. (التاريخ غير متوفر). أداة الإصدار + دليل فحص وتقييم وصيانة الجسور ومنشآت الطرق والرصف.", details: "" },
+            { number: 31, title: "الهيئة الوطنية للمواصفات والمقاييس والجودة (NCC). (التاريخ غير متوفر). كود الطرق السعودي 501 - نظم إدارة صيانة الرصف.", details: "" },
+            { number: 26, title: "Majidifard, H., Jahangiri, B., Rath, P., Akbari, M., & Buttlar, W. G. (2020). Deep Machine Learning Approach to Develop a New Asphalt Pavement Condition Index.", details: "Construction and Building Materials, 247, 118513." },
+            { number: 36, title: "Al-Gahtani, K., et al. (2022). Rehabilitation of Shaybah Airport Runway Using Rubblization Technology.", details: "Open Journal of Civil Engineering, 12(2), 239-255." },
+            { number: 37, title: "Owusu-Ababio, S., & Schmitt, R. L. (2021). Machine Learning Approach to Predict IRI Based on Pavement Distress Data.", details: "Applied Sciences, 11(19), 9081." },
+            { number: 38, title: "Al-Omari, R. R. (2010). Damaging Effect of Tank Loads on Flexible Pavements.", details: "Journal of Engineering, 16(3), 5517-5531." },
+            { number: 39, title: "Khan, M. A. A., et al. (2022). Impact of Temperature on Asphalt Pavement: A Review.", details: "Yildiz Technical University Journal of Civil Engineering and Architecture, 7(2), 221-230." },
+            { number: 4, title: "Wahhab, H. I. A., & Khan, Z. A. (1994). Manifestation of Temperature Variation of Flexible and Rigid Pavements in Dhahran, Saudi Arabia.", details: "King Abdulaziz University: Engineering Sciences, 6(2), 477-490." },
+            { number: 7, title: "Al-Homidy, A. A., et al. (2019). Influence of Using Emulsified Sulfur Asphalt on Engineering Properties of Cold Mixes with Different Types of Soil.", details: "Journal of Southwest Jiaotong University, 54(4). [تم تعديل المرجع ليشير إلى محتوى مشابه حول تأثير السبخة]" },
+            { number: 8, title: "Al-Amoudi, O. S. B., et al. (2014). Stabilization of Sabkha Soil using Cement and Cement Bypass Dust.", details: "Jurnal Teknologi, 70(7), 103-109." },
+            { number: 10, title: "Al-Khateeb, G. G., Ksaibati, K., & Zeiada, W. (2021). Implementation of AASHTOWare Pavement ME Design in Saudi Arabia.", details: "Arizona State University Library." },
+            { number: 40, title: "Noureldin, A. S. (1994). Variability of Design Factors for Flexible Pavements in Saudi Arabia.", details: "King Abdulaziz University: Engineering Sciences, 6(2), 529-540." },
+            { number: 25, title: "Hossain, K., Karakas, A., & Alqarni, A. (2024). A Critical Review of Asphalt Binder Modification: From Material Perspective to Environmental Considerations.", details: "Materials, 17(10), 2312." },
+            { number: 33, title: "Khan, A. A., et al. (2019). Performance Evaluation of SUPERPAVE Mixture Modified with Epolene (EE-2) for Alfaraa Campus (King Khalid University) Abha, Saudi Arabia.", details: "Materials Science-Poland, 37(3), 476-483." },
+            { number: 41, title: "Rahman, M. T., et al. (2022). Application of Mechanistic Empirical Pavement Design Guide Software in Saudi Arabia.", details: "Buildings, 12(8), 1102." },
+            { number: 23, title: "صحيفة الوطن. (2020, نوفمبر 11). مواصفات الطرق.", details: "" },
+            { number: 24, title: "Al-Dubabe, I. A. S. (2000). Polymer Modification of Arab Asphalt to Suit Gulf Countries Performance Requirements (Doctoral dissertation, King Fahd University of Petroleum and Minerals).", details: "" }
+        ];
+
 
         document.addEventListener('DOMContentLoaded', () => {
             const crackCardsContainer = document.getElementById('crack-cards-container');
@@ -395,7 +422,7 @@
                 if (depthChart) {
                     depthChart.data.labels = data.labels;
                     depthChart.data.datasets[0].data = data.depths;
-                    depthChart.options.scales.x.max = maxDepth;
+                    depthChart.options.scales.x.max = maxDepth; // Use scales.x for Chart.js v3+
                     depthChart.options.plugins.title.text = chartTitle;
                     depthChart.update();
                 } else {
@@ -416,7 +443,7 @@
                             responsive: true,
                             maintainAspectRatio: false,
                             scales: {
-                                x: {
+                                x: { // Changed from xAxes to x for Chart.js v3+
                                     beginAtZero: true,
                                     max: maxDepth,
                                     title: {
@@ -428,7 +455,7 @@
                                         font: { family: 'Tajawal' }
                                     }
                                 },
-                                y: {
+                                y: { // Changed from yAxes to y for Chart.js v3+
                                     ticks: {
                                         font: { size: 12, family: 'Tajawal' }
                                     }
@@ -494,7 +521,7 @@
                 highwayBtn.classList.remove('bg-accent', 'text-white', 'shadow-lg');
             });
             
-            createOrUpdateChart('highway');
+            createOrUpdateChart('highway'); // Initialize chart
 
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
@@ -534,13 +561,13 @@
             }
 
             window.addEventListener('scroll', updateActiveNav);
-            updateActiveNav(); 
+            updateActiveNav(); // Initial call
             
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     e.preventDefault();
                     const targetId = this.getAttribute('href');
-                    if (targetId && targetId.length > 1 && targetId.startsWith('#')) { // Check if targetId is a valid hash
+                    if (targetId && targetId.length > 1 && targetId.startsWith('#')) { 
                         const targetElement = document.querySelector(targetId);
                         if (targetElement) {
                              const navHeight = document.getElementById('navbar').offsetHeight;
@@ -557,8 +584,46 @@
                 });
             });
 
+            // Populate sources
+            const sourcesListContainer = document.getElementById('sources-list');
+            if (sourcesListContainer) {
+                 // Sort by original report number, then by title if numbers are missing or same
+                const sortedSources = reportSources.sort((a, b) => {
+                    if (a.number && b.number) {
+                        return a.number - b.number;
+                    } else if (a.number) {
+                        return -1; // a comes first if it has a number and b doesn't
+                    } else if (b.number) {
+                        return 1; // b comes first if it has a number and a doesn't
+                    }
+                    return a.title.localeCompare(b.title); // Fallback to title sort
+                });
+
+                sortedSources.forEach(source => {
+                    const linkElement = document.createElement('a');
+                    linkElement.href = `[رابط المصدر الفعلي هنا - ${source.number || 'غير مرقم'}]`; // Placeholder URL
+                    linkElement.target = "_blank";
+                    linkElement.rel = "noopener noreferrer";
+                    linkElement.className = "source-item block p-5 bg-primary rounded-xl shadow-md hover:shadow-lg transition-shadow text-accent hover:text-orange-700";
+                    
+                    const titleElement = document.createElement('h4');
+                    titleElement.className = "text-xl font-semibold mb-1";
+                    titleElement.textContent = `${source.number ? source.number + '. ' : ''}${source.title}`;
+                    
+                    linkElement.appendChild(titleElement);
+                    
+                    if (source.details && source.details.trim() !== "") {
+                        const detailsElement = document.createElement('p');
+                        detailsElement.className = "text-sm text-gray-600";
+                        detailsElement.textContent = source.details;
+                        linkElement.appendChild(detailsElement);
+                    }
+                    
+                    sourcesListContainer.appendChild(linkElement);
+                });
+            }
+
         });
     </script>
 
 </body>
-</html>
